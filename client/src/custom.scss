@@ -1,0 +1,174 @@
+
+
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+  
+   
+  }
+  
+
+
+  .input-hidden {
+    position: absolute;
+    left: -9999px;
+  }
+  
+  input[type=radio]:checked + label>div>img {
+    border: 1px solid #fff;
+    box-shadow: 0 0 3px 3px rgb(153, 0, 0);
+  }
+  
+  /* Stuff after this is only to make things more pretty */
+  input[type=radio] + label>div>img {
+    border: 1px dashed #444;
+    width: 250px;
+    height: 250px;
+    transition: 500ms all;
+  }
+  
+  input[type=radio]:checked + label>div>img {
+    transform: 
+      rotateZ(-10deg) 
+      rotateX(10deg);
+  }
+  
+  #video {
+    
+    object-fit: cover;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -2;
+  }
+
+
+  .overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: #08b2e6;
+    opacity: 0.2;
+}
+  #slog{
+    color: #fff !important;
+  }
+  
+#dobBack{
+  background-image: url("./images/dobbackground.jpg");
+  min-width: 100vw;
+  min-height: 100vh;
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+  align-items: center;
+}
+#genderSelection{
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  justify-content: space-around;
+  align-items: center;
+
+}
+#dobBack div
+{
+margin-left: 10vw;
+
+width: 30vw;
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+}  
+#dobBack div h3
+{
+color: #fff;
+text-align: center;
+}  
+#dobBack div h5
+{
+color: #fff;
+text-align: center;
+}  
+#dobBack div button
+{
+text-align: center;
+margin: auto;
+}  
+  
+  .buttons {
+    margin: 10%;
+    text-align: center;
+  }
+  .btn-hover {
+    width: 200px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    margin: 20px;
+    height: 55px;
+    text-align: center;
+    border: none;
+    background-size: 300% 100%;
+    
+    border-radius: 50px;
+    moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+  }
+  
+  
+  
+  .btn-hover:hover {
+    background-position: 100% 0;
+    moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+  }
+  
+  
+  .btn-hover:focus {
+    outline: none;
+  }
+  .btn-hover1:focus {
+    outline: none;
+  }
+  .btn-hover.color-10 {
+    background-image: linear-gradient(
+      to right,
+      #B71C1C,
+      #f12d2d,
+      #ff0000,
+      #a30909
+    );
+    box-shadow: 0 4px 15px 0 rgba(236, 116, 149, 0.75);
+  }
+  
+  .btn-hover.color-11 {
+    background-image: linear-gradient(
+      to right,
+      #B71C1C,
+      #f12d2d,
+      #ff0000,
+      #a30909
+    );
+   
+  }
+
+
+  
+  
+
+@import "~bootstrap/scss/bootstrap.scss";

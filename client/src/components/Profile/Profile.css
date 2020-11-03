@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+
+
+h1 {
+  color:  rgb(146, 0, 0) !important;
+}
+
+.gridSetting{
+    display: grid;
+    grid-template-columns: 200px 1fr ;
+}
+
+.profile span{
+  color: #3d0dc2;
+}
+.profile span:hover {
+  color: #0026ff;
+  cursor: pointer;
+}
+
+.form-control{
+  color: black !important;
+}
+.profileForm{
+  padding-right: 30%;
+}
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #550505;
+  display: block;
+  
+}
+
+
+.sidenav a:hover {
+  color: white;
+  background:#550505;
+  border-radius: 25px;
+ 
+}
+.sidenav .active {
+  
+  color: white;
+  background:#550505;
+  border-radius: 25px;
+ 
+ 
+}
+.MuiDropzonePreviewList-removeButton{
+  left :25% ;
+}
+
+#hobies ul li{
+  font-size: 18px;
+  font-weight: bold;
+}
+.deleteIcon{
+ display: none !important;
+}
+.languageButton{
+  box-shadow: none !important; 
+}
+
+.languageButton:hover  .deleteIcon{
+  
+  display: inline-block !important;
+}
+
+.MuiDropzoneArea-textContainer p{
+  color: black !important;
+}
+
+#profileImage {
+  background: none !important;
+  width: 200px;
+  height: 200px;
+}
+
+.MuiDropzoneArea-textContainer p{
+  visibility: hidden !important;
+
+}
+.MuiDropzoneArea-textContainer p:after{
+  content: 'Attach three images' !important;
+  visibility: visible !important;
+  display: block;
+}

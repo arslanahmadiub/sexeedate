@@ -1,0 +1,82 @@
+header{
+    position: relative;
+    background-color: #BE1E1E !important;
+  height: 4rem !important;
+    min-height: 3rem !important;
+    width: 100%;
+    overflow: hidden;
+}
+
+main{
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto !important;
+
+}
+.MuiPaper-root{
+  background-color: #BE1E1E !important;
+  color: #fff !important;
+}
+.MuiTable-root{
+  background-color: #e4e4e4 !important;
+  color: rgb(0, 0, 0) !important;
+}
+
+element.style {
+  box-sizing: border-box;
+  width: calc(218.5px);
+}
+
+.MTableHeader-header-23{
+  background-color: #ada9a9 !important;
+
+} 
+
+
+.MTableToolbar-root-15{
+  background-color: #BE1E1E !important;
+  color: #fff !important;
+}
+.MuiListItemIcon-root{
+  color: rgba(255, 255, 255, 1) !important;
+
+}
+.MuiInputAdornment-root span{
+  color: #fff !important;
+}
+.MuiInputAdornment-root {
+  border-color: rgb(255, 255, 255) !important;
+
+}
+.MuiIconButton-label span{
+  color: rgb(0, 0, 0) !important;
+}
+.MuiInputBase-root {
+color: white !important;
+}
+.MuiIconButton-root{
+  color: rgba(255, 255, 255, 1) !important;
+
+}
+
+.MuiInputBase-root span{
+  color: rgb(255, 255, 255) !important;
+}
+
+.MuiSelect-root div{
+  color: rgb(0, 0, 0) !important;
+}
+.MuiTableBody-root{
+  background: rgb(161, 159, 159) !important;
+}
+.MuiTableHead-root{
+  background: rgb(65, 64, 64) !important;
+  color: wheat !important;
+}
+
+.MuiTableCell-head{
+  background: rgb(114, 112, 112) !important;
+  color: white !important;
+}

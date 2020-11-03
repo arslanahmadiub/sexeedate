@@ -1,0 +1,6 @@
+
+{
+  "mongoURI": "mongodb://127.0.0.1:27017/tinder",
+  "jwtPrivateKey": "jwtPrivateKey",
+  "imageUrl":"http://67.207.95.173:5000/images/"
+}

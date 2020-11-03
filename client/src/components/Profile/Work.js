@@ -1,0 +1,299 @@
+import React, { Component } from "react";
+import "./Profile.css";
+import { Link } from "react-router-dom";
+import {workPost} from '../../services/work'
+import {workGet} from '../../services/work'
+import {deCodeId} from '../../services/userId'
+import SearchAppBar from "../Timline/SearchAppBar";
+class Work extends Component {
+  state = {
+    display: "block",
+    workStyle: "none",
+    collegeDisplay: "block",
+    collegeForm: "none",
+
+    workData: {
+      jobTitle: "",
+      jobCity: "",
+      jobDesc: "",
+    },
+    uniData: {
+      uniName: "",
+      startDate: "",
+      endDate: "",
+      degreeDesc: "",
+    },
+  };
+
+  componentDidMount(){
+    this.fetchWorkData()
+  }
+
+
+  handelWorkChange = async (e) => {
+    let { workData } = { ...this.state };
+    let currentState = workData;
+
+    const { name, value } = e.target;
+    currentState[name] = value;
+    await this.setState({ workData: currentState });
+  };
+
+  handelUniData = async (e) => {
+    let { uniData } = { ...this.state };
+    let currentState = uniData;
+
+    const { name, value } = e.target;
+    currentState[name] = value;
+    await this.setState({ uniData: currentState });
+  };
+
+  fetchWorkData =async ()=>{
+    let userId =await deCodeId();
+    let id={userId}
+    let data=await workGet(id)
+    let {jobTitle, jobCity, jobDesc, startDate, endDate,collegeName, degreeDesc} = data.data
+   let uniData ={
+     uniName:collegeName,
+     startDate:startDate,
+     endDate:endDate,
+     degreeDesc:degreeDesc
+
+   }
+   let jobData ={
+    jobTitle,
+    jobCity,
+    jobDesc
+   }
+    await this.setState({uniData:uniData, workData:jobData})
+   console.log(this.state.uniData, this.state.workData)
+  }
+
+
+  handelWorkPlace = () => {
+    this.setState({ display: "none", workStyle: "block" });
+  };
+  handelWorkSave =async () => {
+    this.postWorkData()
+    this.setState({ display: "block", workStyle: "none" });
+    
+  };
+
+  postWorkData = async() =>{
+    let { uniName, startDate, endDate, degreeDesc } = this.state.uniData;
+    let { jobTitle, jobCity, jobDesc } = this.state.workData;
+    let userId =await deCodeId();
+    let data ={
+      userId,
+      jobTitle,
+      jobCity,
+      jobDesc,
+      uniName,
+      startDate,
+      endDate,
+      degreeDesc
+    }
+    let result =await workPost(data);
+  }
+  handelCollege = () => {
+    this.setState({ collegeDisplay: "none", collegeForm: "block" });
+  };
+  handelCollegeSave = () => {
+    this.postWorkData()
+    this.setState({ collegeDisplay: "block", collegeForm: "none" });
+  };
+
+  render() {
+    let { display, workStyle, collegeDisplay, collegeForm } = this.state;
+    let { uniName, startDate, endDate, degreeDesc } = this.state.uniData;
+    let { jobTitle, jobCity, jobDesc } = this.state.workData;
+
+    let style = {
+      display,
+    };
+    let workStyles = {
+      display: workStyle,
+    };
+
+    let collegeShow = {
+      display: collegeDisplay,
+    };
+    let collegeFormShow = {
+      display: collegeForm,
+    };
+    return (
+      <React.Fragment>
+        <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
+          <SearchAppBar/>
+          <div
+            className="container"
+            style={{
+              marginTop: "0",
+              background: "#100C08",
+              padding: "20px",
+              height: "100vh",
+              width: "100vw",
+              overflow: "auto",
+            }}
+          >
+            <div className="row">
+              <div
+                className="col-md-12 "
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                <h1 style={{ color: "#a30909" }}>About Section</h1>
+              </div>
+            </div>
+            <br />
+            <div className="row">
+              <div className="col-md-3  " style={{ textAlign: "center" }}>
+                <div className="sidenav">
+                  <Link to="/basicinfo" style={{ marginTop: "5px" }}>
+                    Basic Info
+                  </Link>
+                  <Link to="/contact" style={{ marginTop: "5px" }}>
+                    Contact
+                  </Link>
+
+                  <Link to="/place" style={{ marginTop: "5px" }}>
+                    Place
+                  </Link>
+                  <Link
+                    to="/work"
+                    style={{ marginTop: "5px" }}
+                    className="active"
+                  >
+                    Work and Education
+                  </Link>
+                  <Link to="/hobies" style={{ marginTop: "5px" }}>
+                    Hobies
+                  </Link>
+                  <Link to="/covid" style={{ marginTop: "5px" }}>
+                    Covid Question
+                  </Link>
+                </div>
+              </div>
+
+              <div
+                className="col-md-9 profile"
+                style={{ padding: "25px", color: "white" }}
+              >
+                {/* Work Section */}
+
+                <h3>Work</h3>
+                <div style={style}>
+                  <span onClick={this.handelWorkPlace}>Add Work Place</span>
+          <h5 className="mt-2">{jobTitle}</h5>
+                  <div style={{ display: "flex" }}>
+                   
+                    <p className="">
+                    at  {jobCity}
+                    </p>
+                  </div>
+                  <p style={{ marginTop: "-10px" }}>
+                   {jobDesc}
+                  </p>
+                </div>
+                <div className="profileForm" style={workStyles}>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="jobTitle"
+                    value={jobTitle}
+                    placeholder="Job Title"
+                    onChange={this.handelWorkChange}
+                  />
+                  <input
+                    type="text"
+                    className="form-control mt-3"
+                    name="jobCity"
+                    placeholder="Job City"
+                    value={jobCity}
+                    onChange={this.handelWorkChange}
+                  />
+                  <input
+                    type="text"
+                    className="form-control mt-3"
+                    name="jobDesc"
+                    value={jobDesc}
+                    placeholder="Job Description"
+                    onChange={this.handelWorkChange}
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-success mt-3"
+                    style={{ float: "right" }}
+                    onClick={this.handelWorkSave}
+                  >
+                    Save
+                  </button>
+                </div>
+
+                {/* Education Section */}
+                <br />
+                <hr />
+
+                <h3>Universty</h3>
+                <div style={collegeShow}>
+                  <span onClick={this.handelCollege}>Add College</span>
+                  <h5 className="mt-2">
+                    Studied at {uniName}
+                  </h5>
+                  <div style={{ display: "flex" }}>
+          <p>{startDate} to {endDate}</p>
+                  </div>
+          <p style={{ marginTop: "-10px" }}>{degreeDesc}</p>
+                </div>
+                <div style={collegeFormShow} className="profileForm">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="uniName"
+                    value={uniName}
+                    onChange={this.handelUniData}
+                    placeholder="Enter College Name"
+                  />
+                  <h5 className="mt-3">Time Period</h5>
+                  <p>Start Date</p>
+                  <input
+                    type="date"
+                    className="form-control"
+                    name="startDate"
+                    value={startDate}
+                    onChange={this.handelUniData}
+                  />
+                  <p className=" mt-3">End Date</p>
+                  <input
+                    type="date"
+                    className="form-control "
+                    name="endDate"
+                    value={endDate}
+                    onChange={this.handelUniData}
+                  />
+                  <input
+                    type="text"
+                    className="form-control mt-3"
+                    name="degreeDesc"
+                    value={degreeDesc}
+                    onChange={this.handelUniData}
+                    placeholder="Enter Degree Description"
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-success mt-3"
+                    style={{ float: "right" }}
+                    onClick={this.handelCollegeSave}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
+}
+
+export default Work;
