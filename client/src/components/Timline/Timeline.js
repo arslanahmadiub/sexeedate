@@ -9,6 +9,8 @@ import Inputcard from "./Inputcard";
 import Eventcard from "./Eventcard";
 import Avatar from "@material-ui/core/Avatar";
 import modelImage from "../../images/mod2.png";
+import { getFriendWithChat } from "../../services/chat";
+
 import "./Timeline.css";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 import SearchAppBar from "./SearchAppBar";
@@ -16,14 +18,18 @@ import { friendGet } from "../../services/friendGet";
 import { deCodeId } from "../../services/userId";
 import { chatGet } from "../../services/chat";
 import { postGet } from "../../services/post";
-import {useDispatch} from 'react-redux'
-import {getFullUserDetail} from '../../services/profile'
-import {userId} from '../../action/userIdAction'
+import { useDispatch } from "react-redux";
+import { getFullUserDetail } from "../../services/profile";
+import { userId } from "../../action/userIdAction";
+import { messageFriendList } from "../../action/userIdAction";
+import { showMessage } from "../../action/userIdAction";
+import { useSelector } from "react-redux";
 
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Chatbox from "./Chatbox";
 import MessageList from "./MessageList";
+import { unreadMessages } from "../../action/userIdAction";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,7 +60,13 @@ function Timeline() {
   const [friendName, setFriendName] = useState("");
   const [postData, setPostData] = useState([]);
   const dispatch = useDispatch();
+  const showDispatch = useDispatch();
 
+  const friendDispatch = useDispatch();
+  const show = useSelector((state) => state.userId.showMessage);
+  const unreadDispatch = useDispatch();
+  const friendMessages = useSelector((state) => state.userId.messageFriendList);
+  const currentUser = useSelector((state) => state.userId.users[0]._id);
   const [friendData, setFriendData] = useState({
     friendId: "",
     friendName: "",
@@ -70,6 +82,7 @@ function Timeline() {
     fetchFriendList();
     fetchPostData();
     setUser();
+    fetchChataData();
   }, []);
 
   const handleMessenger = () => {
@@ -89,9 +102,10 @@ function Timeline() {
 
   const handelFriendClick = async (e) => {
     await setShowChatBox(true);
-
+  
     await setFriendData(e);
     myRef.current.fetchMessages();
+
   };
 
   const closeChatBox = async (e) => {
@@ -130,17 +144,70 @@ function Timeline() {
   };
 
   let setUser = async () => {
+    let result =await deCodeId()
     let id = {
-      userId: "5f97b6c20cfdf8340cc2c004",
+      userId: result,
     };
     let { data } = await getFullUserDetail(id);
 
-     dispatch(userId(data));
+    dispatch(userId(data));
   };
+
+  let fetchChataData = async () => {
+    let id = await deCodeId();
+    let userId = { userId: id };
+
+    let { data } = await getFriendWithChat(userId);
+
+    let friendArray = [];
+
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].Chat.length > 0) {
+        let friend = {
+          name: data[i].fullName,
+          avatar: data[i].Image.userImages.imageUrl,
+          lastMessage: data[i].Chat[data[i].Chat.length - 1].message,
+          id: data[i]._id,
+          read:data[i].Chat[data[i].Chat.length - 1].read,
+          senderId:data[i].Chat[data[i].Chat.length - 1].senderId,
+          receiverId:data[i].Chat[data[i].Chat.length - 1].receiverId,
+        };
+        friendArray.push(friend);
+      }
+    }
+    friendDispatch(messageFriendList(friendArray));
+  };
+
+  let friendId=async(e)=>{
+   
+    let data ={
+      friendId: e.id,
+      friendName: e.name,
+      friendImage: e.avatar
+    }
+    setFriendData(data)
+    await setShowChatBox(true);
+    myRef.current.fetchMessages();
+
+  }
+
+  let countUnread =()=>{
+    fetchChataData()
+    let count =0;
+    for (let i=0; i<friendMessages.length; i++){
+        if(friendMessages[i].receiverId === currentUser  && friendMessages[i].read ==false   ){
+            count++
+        }
+    }
+    
+    unreadDispatch(unreadMessages(count))
+    console.log(count)
+    console.log(friendMessages)
+  }
 
   return (
     <div className={classes.root}>
-      <MessageList/>
+      <MessageList change={(data)=>{friendId(data)}}/>
       <SearchAppBar />
 
       <Grid container className={classes.mainContainer}>
@@ -150,6 +217,7 @@ function Timeline() {
           name={friendData.friendName}
           image={friendData.friendImage}
           id={friendData.friendId}
+          update={()=>countUnread()}
           ref={myRef}
         />
 

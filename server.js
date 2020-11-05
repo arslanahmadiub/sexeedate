@@ -64,6 +64,7 @@ app.use("/allPostGet", require("./routes/allPostGet"));
 app.use("/allProfileGet", require("./routes/userDetailGet"));
 app.use("/updateProfileStatus", require("./routes/updateProfileStatus"));
 app.use("/imageDelete", require("./routes/imageDel"));
+app.use("/limitedChat", require("./routes/getLastChat"));
 
 app.use("/postDelete", require("./routes/postDel"));
 app.use("/profileDelete", require("./routes/profileDel"));
@@ -73,6 +74,8 @@ app.use("/getFriendChat", require("./routes/getFriendChat"));
 app.use("/getUserGender", require("./routes/getUserGender"));
 app.use("/getFullUserDetail", require("./routes/getFullUserDetail"));
 app.use("/getUserImage", require("./routes/getUserImage"));
+app.use("/forgetPass", require("./routes/forgotPass"));
+app.use("/updatePass", require("./routes/updatePassword"));
 
 app.get("/confirm", require("./routes/confirmEmail"));
 

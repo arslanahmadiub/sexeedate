@@ -7,3 +7,29 @@ export const userId = (id) =>{
     }
 }
 
+export const showMessage = (show) =>{
+
+
+    return{
+        type:"SHOW_BOX",
+        payload:show
+    }
+}
+
+export const messageFriendList = (data) =>{
+
+
+    return{
+        type:"MESSAGE_LIST",
+        payload:data
+    }
+}
+export const unreadMessages = (data) =>{
+
+
+    return{
+        type:"UNREAD_MESSAGE",
+        payload:data
+    }
+}
+

@@ -138,6 +138,13 @@ class Covid extends Component {
                   >
                     Covid Question
                   </Link>
+                  <Link
+                    to="/setting"
+                    style={{ marginTop: "5px" }}
+                    
+                  >
+                    Setting
+                  </Link>
                 </div>
               </div>
               <div

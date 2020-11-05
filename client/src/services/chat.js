@@ -5,6 +5,7 @@ import { apiEndPoint } from "../config.json";
 const chatPostUrl = apiEndPoint + "/chatPost";
 const chatGetUrl = apiEndPoint + "/chatGet";
 const friendWithChat = apiEndPoint + "/getFriendChat";
+const readLastChat = apiEndPoint + "/limitedChat";
 
 export async function chatPost(data) {
 
@@ -22,5 +23,11 @@ export async function getFriendWithChat(data) {
 
 
     return await axios.post(friendWithChat, data);
+  }
+  
+export async function readLastMessage(data) {
+
+
+    return await axios.post(readLastChat, data);
   }
   

@@ -76,6 +76,7 @@ router.post("/", async (req, res) => {
                 senderId: 1,
                 receiverId: 1,
                 message: 1,
+                read:1
               },
             },
           ],

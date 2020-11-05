@@ -29,7 +29,7 @@ h1 {
   padding: 6px 8px 6px 16px;
   text-decoration: none;
   font-size: 18px;
-  color: #550505;
+  color: #B71C1C;
   display: block;
   
 }
@@ -37,14 +37,14 @@ h1 {
 
 .sidenav a:hover {
   color: white;
-  background:#550505;
+  background:#B71C1C;
   border-radius: 25px;
  
 }
 .sidenav .active {
   
   color: white;
-  background:#550505;
+  background:#B71C1C;
   border-radius: 25px;
  
  

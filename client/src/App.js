@@ -35,6 +35,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminProtected from "./components/AdminProtected";
 import {Provider} from 'react-redux'
 import store from './store'
+import Setting from "./components/Profile/Setting";
 
 
 
@@ -64,6 +65,7 @@ function App() {
         <ProtectedRoute exact path="/hobies" component={Hobies} />
         <ProtectedRoute exact path="/contact" component={Contact} />
         <ProtectedRoute exact path="/basicinfo" component={Basic} />
+        <ProtectedRoute exact path="/setting" component={Setting} />
         <ProtectedRoute exact path="/covid" component={Covid} />
         <ProtectedRoute exact path="/slider" component={Slider} />
         <ProtectedRoute exact path="/home" component={Deck} />

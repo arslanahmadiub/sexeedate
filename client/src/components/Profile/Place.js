@@ -160,6 +160,13 @@ componentDidMount(){
                   >
                     Covid Question
                   </Link>
+                  <Link
+                    to="/setting"
+                    style={{ marginTop: "5px" }}
+                    
+                  >
+                    Setting
+                  </Link>
                 </div>
               </div>
               <div className="col-md-9 profile" style={{ padding: "25px", color:"white" }}>

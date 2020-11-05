@@ -86,6 +86,8 @@ await this.setState({userAvatar:image.imageUrl})
     let id = await deCodeId();
     await this.setState({ currentUser: id });
   };
+
+  
   fetchChataData = async () => {
     let id = await deCodeId();
     let userId = { userId: id };

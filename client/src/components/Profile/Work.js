@@ -171,6 +171,13 @@ class Work extends Component {
                   <Link to="/covid" style={{ marginTop: "5px" }}>
                     Covid Question
                   </Link>
+                  <Link
+                    to="/setting"
+                    style={{ marginTop: "5px" }}
+                    
+                  >
+                    Setting
+                  </Link>
                 </div>
               </div>
 

@@ -20,6 +20,9 @@ const initalState = {
       _id: "",
     },
   ],
+  showMessage: false,
+  messageFriendList: [],
+  unreadMessages:""
 };
 
 export const userIdReducer = (state = initalState, action) => {
@@ -28,6 +31,21 @@ export const userIdReducer = (state = initalState, action) => {
       return {
         ...state,
         users: action.payload,
+      };
+    case "SHOW_BOX":
+      return {
+        ...state,
+        showMessage: action.payload,
+      };
+    case "MESSAGE_LIST":
+      return {
+        ...state,
+        messageFriendList: action.payload,
+      };
+    case "UNREAD_MESSAGE":
+      return {
+        ...state,
+        unreadMessages: action.payload,
       };
     default:
       return state;

@@ -7,16 +7,17 @@ import {deCodeId} from '../../services/userId'
 import { animateScroll } from "react-scroll";
 import {chatPost} from '../../services/chat'
 import {chatGet} from '../../services/chat'
+import {readLastMessage} from '../../services/chat'
 import "./Timeline.css";
 
 
 
-const socketUrl ="http://67.207.95.173:5000";
-// const socketUrl ="http://localhost:5000";
+// const socketUrl ="http://67.207.95.173:5000";
+const socketUrl ="http://localhost:5000";
 
 class Chatbox extends Component {
   state = {
-    endPoint: "http://67.207.95.173:5000",
+    endPoint: "http://localhost:5000",
     chatShow: this.props.show,
     friendName: this.props.name,
     friendId: this.props.id,
@@ -35,22 +36,27 @@ class Chatbox extends Component {
     this.getCurrentUser();
 
     this.getMessage();
+    
   }
 
   getMessage = () => {
     let socket = io(this.state.endPoint);
     socket.on("res", (data) => {
-      console.log(data)
-      console.log(this.state.currentUser)
-      console.log(this.state.friendId)
-      console.log(data)
+  
       if (data.senderId === this.state.friendId  && data.receiverId === this.state.currentUser) {
         let message = [...this.state.messageList];
         message.push(data);
         this.setState({ messageList: message });
+      console.log(this.state.messageList[this.state.messageList.length-1])
+
+      }
+      if(!this.state.chatShow){
+          
+          this.props.update()
       }
 
       this.scrollToBottom();
+
     });
   };
 
@@ -81,8 +87,10 @@ class Chatbox extends Component {
     let id = await deCodeId();
     await this.setState({ currentUser: id });
   };
-  handelShow = () => {
-    this.props.close();
+  handelShow = async() => {
+    await this.props.close();
+    await this.fetchMessages();
+    console.log(this.state.messageList)
   };
 
   scrollToBottom() {
@@ -97,8 +105,10 @@ class Chatbox extends Component {
       receiverId: this.state.friendId,
     };
     let { data } = await chatGet(getDataObject);
-
+    console.log(data)
     this.setState({ messageList: data });
+    this.scrollToBottom()
+    console.log(this.state.messageList[this.state.messageList.length-1])
   };
 
   handelMessage = async (e) => {
@@ -112,6 +122,14 @@ class Chatbox extends Component {
         receiverId: this.state.friendId,
         message: this.state.inputMessage,
       };
+
+      let readObject={
+        senderId: this.state.friendId,
+        receiverId: this.state.currentUser,
+      }
+      
+      readLastMessage(readObject)
+
       let messageLists = [...this.state.messageList];
       messageLists.push(messageObject);
 
@@ -124,6 +142,9 @@ class Chatbox extends Component {
       this.scrollToBottom();
       this.newMessage(messageObject);
       const { data } = await chatPost(messageObject);
+      this.props.update()
+
+      
     }
   };
 
@@ -150,7 +171,7 @@ class Chatbox extends Component {
             alignItems: "center",
           }}
         >
-          {/* <img src="" style={{width:"40px" , height:"40px"}}/> */}
+     
           <Avatar
             alt="Remy Sharp"
             src={friendImage}
@@ -168,20 +189,7 @@ class Chatbox extends Component {
           </IconButton>
         </div>
         <div id="body">
-          {/* <div id="user1">Hi</div>
-          <div id="user2">Hello</div>
-          <div id="user1">How are you?</div>
-          <div id="user2">I am fine and what about you?</div>
-          <div id="user1">I am also fine but I am getting bored here.</div>
-          <div id="user2">
-            So you can spend your time at youtube watching programming videos.
-          </div>
-          <div id="user2">I am sure you will learn something new.</div>
-          <div id="user1">Ok Sure</div>
-          <div id="user2">Don't forget to subscribe me.</div>
-          <div id="user2">
-            In case of any problem you can contact me via whatsapp 9064973840.
-          </div> */}
+    
 
           {messageList.map((item, index) => {
             return (
