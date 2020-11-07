@@ -6,11 +6,13 @@ import Avatar from "@material-ui/core/Avatar";
 import modelImage from "../../images/mod2.png";
 import { useDispatch } from "react-redux";
 import { userId } from "../../action/userIdAction";
+import { showFriendRequestBox } from "../../action/friendRequestAction";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
+import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import { showMessage } from "../../action/userIdAction";
-import Badge from '@material-ui/core/Badge';
+import Badge from "@material-ui/core/Badge";
 
 import { fade, makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
@@ -33,27 +35,36 @@ const useStyles = makeStyles((theme) => ({
   },
   customBadge: {
     backgroundColor: "#00AFD7",
-    color: "#fff"
-  }
+    color: "#fff",
+  },
 }));
 
 export default function SearchAppBar() {
   let [userImage, setUserImage] = useState("");
   let [userName, setUserName] = useState("");
+  const showCardDispatch = useDispatch();
+  const showCard = useSelector((state) => state.friendRequest.requestBoxShow);
+
   const dispatch = useDispatch();
   const classes = useStyles();
   const users = useSelector(
     (state) => state.userId.users[0].Detail.userImages.imageUrl
   );
   const show = useSelector((state) => state.userId.showMessage);
-  
+  const userFullName = useSelector((state) => state.userId.users[0].firstName);
+
   const unread = useSelector((state) => state.userId.unreadMessages);
-    
+
   useEffect(() => {
     if (users && userImage.length < 1) {
       setUserImage(users);
     }
   }, [users]);
+  useEffect(() => {
+    if (userFullName && userName.length < 1) {
+      setUserName(userFullName);
+    }
+  }, [userFullName]);
 
   const history = useHistory();
   const handelTimeline = () => {
@@ -64,17 +75,16 @@ export default function SearchAppBar() {
   };
   const handelMessenger = () => {
     // history.push("/chat");
-    dispatch(showMessage(!show));
+    showCardDispatch(showFriendRequestBox(false))
 
+    dispatch(showMessage(!show));
   };
   const handelFavrot = () => {
     history.push("/home");
   };
   const handelLogout = async () => {
     history.push("/");
-    localStorage.removeItem("token")
-    
-
+    localStorage.removeItem("token");
   };
 
   useEffect(() => {
@@ -94,6 +104,11 @@ export default function SearchAppBar() {
     }
   };
 
+  let handelFriendRequest = () => {
+    dispatch(showMessage(false));
+   
+    showCardDispatch(showFriendRequestBox(!showCard))
+  };
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
@@ -108,7 +123,7 @@ export default function SearchAppBar() {
               style={{
                 display: "flex",
                 justifyContent: "space-around",
-                width: "20vw",
+                width: "25vw",
                 position: "absolute",
                 top: "5",
                 right: "0",
@@ -131,18 +146,32 @@ export default function SearchAppBar() {
                   <h6>{userName.length > 0 ? userName : "Profile"}</h6>
                 </IconButton>
               </div>
+
               <div className="toolbarItems">
-                <IconButton onClick={handelMessenger}>
-                <Badge badgeContent={unread} color="primary" classes={{ badge: classes.customBadge }}>
-      
-                  <ChatBubbleIcon
+                <IconButton onClick={handelFriendRequest}>
+                  <PeopleAltIcon
                     style={{
                       color: "#B71C1C",
                     }}
                   />
-      </Badge>
                 </IconButton>
               </div>
+              <div className="toolbarItems">
+                <IconButton onClick={handelMessenger}>
+                  <Badge
+                    badgeContent={unread}
+                    color="primary"
+                    classes={{ badge: classes.customBadge }}
+                  >
+                    <ChatBubbleIcon
+                      style={{
+                        color: "#B71C1C",
+                      }}
+                    />
+                  </Badge>
+                </IconButton>
+              </div>
+
               <div className="toolbarItems">
                 <IconButton onClick={handelFavrot}>
                   <FavoriteIcon
@@ -152,6 +181,7 @@ export default function SearchAppBar() {
                   />
                 </IconButton>
               </div>
+
               <div className="toolbarItems">
                 <IconButton onClick={handelLogout}>
                   <ExitToAppIcon

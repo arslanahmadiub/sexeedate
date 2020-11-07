@@ -50,7 +50,7 @@ class Basic extends Component {
     let userId = { userId: this.state.userId };
 
     let { data } = await basicInfoGet(userId);
-    console.log(data);
+
     if (data.length > 0) {
       let firstName = data[0].firstName;
       let lastName = data[0].lastName;

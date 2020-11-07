@@ -76,6 +76,7 @@ app.use("/getFullUserDetail", require("./routes/getFullUserDetail"));
 app.use("/getUserImage", require("./routes/getUserImage"));
 app.use("/forgetPass", require("./routes/forgotPass"));
 app.use("/updatePass", require("./routes/updatePassword"));
+app.use("/sendFriendRequest", require("./routes/friendRequest"));
 
 app.get("/confirm", require("./routes/confirmEmail"));
 

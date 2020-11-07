@@ -30,6 +30,8 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Chatbox from "./Chatbox";
 import MessageList from "./MessageList";
 import { unreadMessages } from "../../action/userIdAction";
+import FriendRequestList from "./FriendRequestList";
+import FriendCard from './FriendCard'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -208,7 +210,9 @@ function Timeline() {
   return (
     <div className={classes.root}>
       <MessageList change={(data)=>{friendId(data)}}/>
+      <FriendRequestList/>
       <SearchAppBar />
+      <FriendCard/>
 
       <Grid container className={classes.mainContainer}>
         <Chatbox

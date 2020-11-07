@@ -156,8 +156,6 @@ h3 {
   width: 290px;
   margin-bottom: 1%;
   padding: 10px;
-  
-  
 
   border-bottom: 1px solid #eee;
 }
@@ -201,7 +199,6 @@ h3 {
   cursor: pointer;
 }
 
-
 .block-ellipsis-unread {
   display: block;
   display: -webkit-box;
@@ -220,10 +217,71 @@ h3 {
   font-weight: bold;
 }
 
-
 #message :hover {
   background: #999;
 }
 
+.friend-box {
+  width: 350px;
+  height: 80%;
+  opacity: 100;
+  background: rgb(248, 0, 0);
+  top: 60px;
+  right: 0px;
+  position: absolute;
+  z-index: 500;
+  padding: 10px;
+  overflow: auto;
+  display: flex;
+}
+.friend-box1 {
+  width: 350px;
+  height: 80%;
+  opacity: 100;
+  background: rgb(248, 0, 0);
+  top: 60px;
+  right: 0px;
+  position: absolute;
+  z-index: 500;
+  padding: 10px;
+  overflow: auto;
+  display: none;
+}
 
 
+
+
+
+#friendItem {
+  display: flex;
+  width: 330px;
+  margin-bottom: 1%;
+  padding: 10px;
+
+  border-bottom: 1px solid #eee;
+}
+
+.friendCard {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  z-index: 800;
+}
+.friendCard1 {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  z-index: 800;
+}

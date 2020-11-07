@@ -96,6 +96,8 @@ function MessageList(props) {
                 onClick={() => {
                   handelClick(item);
                 }}
+                key={index}
+
               >
                 <div id="messageItem">
                   <Avatar
@@ -106,7 +108,7 @@ function MessageList(props) {
                   <div id="messengerName">
                     <h5>{item.name}</h5>
 
-                    <div className={item.read ? "block-ellipsis" : "block-ellipsis-unread"}>{item.lastMessage}</div>
+                    <div className={item.senderId === currentUser ? "block-ellipsis" : "block-ellipsis-unread"}>{item.lastMessage}</div>
                   </div>
                 </div>
               </div>

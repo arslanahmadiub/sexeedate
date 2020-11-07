@@ -59,9 +59,9 @@ class Deck extends Component {
       gender:this.state.gender
     };
     let { data } = await matchGet(id);
-    console.log(data)
+  
    await this.setState({data})
-   console.log(this.state.data)
+   
   };
 
   getAge = (data) => {
@@ -82,8 +82,8 @@ class Deck extends Component {
 
             {this.state.data.map((item, index) => {
                 return (
-                  <div className="swiper-slide ">
-                    <Card id={index} images={item.Detail.userImages} name={item.fullName} age={this.getAge(item.dob)} video={item.Detail.video.image_url} bio ={item.Detail.bio} />
+                  <div className="swiper-slide " key={index}>
+                    <Card id={item._id} images={item.Detail.userImages} name={item.fullName} age={this.getAge(item.dob)} video={item.Detail.video.image_url} bio ={item.Detail.bio} />
                   </div>
                 );
               })}

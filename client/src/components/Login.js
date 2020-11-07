@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import { Button, Modal, Alert } from "react-bootstrap";
 import { login } from "../services/auth";
-
-
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class Login extends Component {
   constructor(props) {
@@ -18,6 +17,7 @@ class Login extends Component {
       errors: "",
       loginErrors: "",
       errorShow: false,
+      loading:false
     };
   }
   componentWillReceiveProps(nextProps) {
@@ -30,13 +30,14 @@ class Login extends Component {
       return <Alert variant="warning">{this.state.loginErrors}</Alert>;
     }
   };
- 
+
   handleSignIn = async () => {
     try {
       const { signInEmail, signInPassword } = this.state.signInData;
-     let data= await login(signInEmail, signInPassword);
-     localStorage.setItem("token", data.data)
-      
+      this.setState({loading:true})
+      let data = await login(signInEmail, signInPassword);
+      localStorage.setItem("token", data.data);
+
       let signInData = {
         signInEmail: "",
         signInPassword: "",
@@ -47,15 +48,21 @@ class Login extends Component {
         signInShow: false,
       });
       window.location = "#/timeline";
-
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
+      this.setState({loading:false})
+
         this.setState({ loginErrorShow: true, loginErrors: ex.response.data });
         console.log(ex.response.data);
       }
     }
   };
 
+  onEnterKeyPress = (e) => {
+    if (e.key === "Enter") {
+      this.handleSignIn();
+    }
+  };
   handleSignInChange = async (e) => {
     const { signInData } = { ...this.state };
     const currentState = signInData;
@@ -64,12 +71,10 @@ class Login extends Component {
 
     await this.setState({ signInData: currentState });
   };
-  handelForgotPassword =()=>{
-    this.props.forgot()
-  }
-  hadelHide=()=>{
-    
-  }
+  handelForgotPassword = () => {
+    this.props.forgot();
+  };
+  hadelHide = () => {};
   render() {
     const { signInEmail, signInPassword } = this.state.signInData;
 
@@ -77,10 +82,14 @@ class Login extends Component {
       <Modal show={this.state.signInShow} onHide={this.props.handel}>
         <Modal.Body>
           {this.showLoginError()}
+          <div
+                    style={this.state.loading ? loadingStyle : unLoadingStyle}
+                  >
+                    <CircularProgress color="inherit" />
+                  </div>
           <div className="row">
             <div className="col">
               <h4>Sign In Here</h4>
-              
             </div>
           </div>
           <br />
@@ -95,6 +104,7 @@ class Login extends Component {
                 id="signInEmail"
                 name="signInEmail"
                 placeholder="Enter Your Email..."
+                onKeyDown={this.onEnterKeyPress}
               />
             </div>
           </div>
@@ -110,32 +120,63 @@ class Login extends Component {
                 id="signInPassword"
                 name="signInPassword"
                 placeholder="Enter Your Password..."
+                onKeyDown={this.onEnterKeyPress}
               />
             </div>
           </div>
           <div className="row">
             <div className="col">
-              <p style={{color:"blue", float:"right", cursor:"pointer"}} onClick={()=>this.props.forgot()}>Forgot Password?</p>
-          
+              <p
+                style={{ color: "blue", float: "right", cursor: "pointer" }}
+                onClick={() => this.props.forgot()}
+              >
+                Forgot Password?
+              </p>
             </div>
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-         
+          <div style={{float:"right"}}>
           <Button
             className="btn btn-danger"
-            style={{background:"#B71C1C"}}
-
+            style={{ background: "#B71C1C" ,  }}
             onClick={() => this.handleSignIn()}
           >
             Login
           </Button>
-        </Modal.Footer>
+          </div>
+          
+        </Modal.Body>
+        {/* <Modal.Footer>
+        
+        </Modal.Footer> */}
       </Modal>
     );
   }
 }
 
-export default Login
+export default Login;
 
+const loadingStyle = {
+  zIndex: 50,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  background: "rgba(67.8, 84.7, 90.2, 0.8)",
+  width: "100%",
+  height: "100%",
+  position: "absolute",
+  top: "0",
+  left: "0",
+};
 
+const unLoadingStyle = {
+  zIndex: -50,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  background: "rgba(67.8, 84.7, 90.2, 0.8)",
+  width: "100%",
+  height: "100%",
+  position: "absolute",
+  top: "0",
+  left: "0",
+};
