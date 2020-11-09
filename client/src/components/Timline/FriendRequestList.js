@@ -6,6 +6,10 @@ import { useDispatch } from "react-redux";
 import { showMessage } from "../../action/userIdAction";
 import { unreadMessages } from "../../action/userIdAction";
 import { showFriendVideo } from "../../action/friendRequestAction";
+import { setFriendRequestProfile } from "../../action/friendRequestAction";
+import { deleteFriendRequestAction } from "../../action/friendRequestAction";
+import {deleteFriendRequest} from '../../services/friendGet'
+import {addFriendInList} from '../../services/friendGet'
 import Button from "@material-ui/core/Button";
 
 import "./Timeline.css";
@@ -60,34 +64,93 @@ function FriendRequestList(props) {
   const friendMessages = useSelector((state) => state.userId.messageFriendList);
   const currentUser = useSelector((state) => state.userId.users[0]._id);
   const showDispatch = useDispatch();
+  const deleteFriendDispatch = useDispatch();
   const unreadDispatch = useDispatch();
   const showVideoDispatch = useDispatch();
+  const setFriendProfileDispatch = useDispatch();
   const showCard = useSelector((state) => state.friendRequest.requestBoxShow);
+  const showFriendDetail = useSelector((state) => state.friendRequest.friendRequestProfile);
+  
+  const friendRequestData = useSelector(
+    (state) => state.friendRequest.freindRequest
+  );
+ console.log(friendRequestData)
 
 
-    let showDetail =() =>{
-        
-        showVideoDispatch(showFriendVideo(true))
+
+  let showDetail = async(id) => {
+
+
+    await setFriendProfileDispatch(setFriendRequestProfile(id))
+
+    await showVideoDispatch(showFriendVideo(true));
+  };
+
+  let handelDecline =async(item)=>{
+
+    let requestId ={
+      id:item._id
     }
+   await deleteFriendDispatch(deleteFriendRequestAction(item._id))
+    await deleteFriendRequest(requestId)
+    
+  }
+  let handelAccept = async (item) => {
+    let requestId ={
+      id:item._id
+    }
+    if (currentUser.length > 0) {
+      let data = {
+        friendOne: currentUser,
+        friendTwo: item.senderId,
+      };
+      await addFriendInList(data);
+      await deleteFriendDispatch(deleteFriendRequestAction(item._id))
+      await deleteFriendRequest(requestId)
+    }
+  };
 
   return (
-    <div className={showCard ? "friend-box":"friend-box1"} >
-      <div >
-        <div id="friendItem">
-          <Avatar alt="Remy Sharp" src={img1} className={classes.large} />
-          <div id="messengerName">
-            <h5 onClick={showDetail}>Arslan Ahmad</h5>
+    <div className={showCard ? "friend-box" : "friend-box1"}>
+      <div>
+        {friendRequestData.length > 0
+          ? friendRequestData.map((item, index) => {
+              return (
+                <div id="friendItem" key={index}>
+                  <Avatar
+                    alt="Remy Sharp"
+                    src={item.Detail.userImages[0].imageUrl}
+                    className={classes.large}
+                  />
+                  <div id="messengerName">
+                    <h5 onClick={()=>showDetail(item._id)}>{item.Name.fullName}</h5>
 
-            <div>
-              <Button variant="contained" color="primary">
-                Accept
-              </Button>
-              <Button variant="contained" color="primary" style={{marginLeft:"10px"}}>
-                Decline
-              </Button>
-            </div>
-          </div>
-        </div>
+                    <div>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          handelAccept(item);
+                        }}
+                      >
+                        Accept
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ marginLeft: "10px" }}
+                        onClick={() => {
+                          handelDecline(item);
+                        }}
+                      >
+                        Decline
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          : null}
       </div>
     </div>
   );

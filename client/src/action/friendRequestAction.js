@@ -15,3 +15,34 @@ export const showFriendVideo = (data) =>{
         payload:data
     }
 }
+
+export const setFriendRequestData = (data) =>{
+
+
+    return{
+        type:"SET_FRIEND_REQUEST",
+        payload:data
+    }
+}
+
+
+export const setFriendRequestProfile = (data) =>{
+
+
+    return{
+        type:"SET_FRIEND_PROFILE",
+        payload:data
+    }
+}
+
+export const deleteFriendRequestAction = (data) =>{
+
+
+    return{
+        type:"REMOVE_FRIEND_PROFILE",
+        payload:data
+    }
+}
+
+
+

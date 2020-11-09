@@ -2,36 +2,64 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const router = express.Router();
-const Profile = require("../models/Profile");
-
+const FriendList = require("../models/FriendList");
+const BasicInfo = require("../models/BasicInfo");
 
 router.post("/", async (req, res) => {
-    let data = req.body;
-    var id = mongoose.Types.ObjectId(data.userId);
-    
-    try {
-   
-      const result = await Profile.aggregate([
-        { "$match": {_id :{$ne:id}}},
-        { 
-            $addFields: { "_id": { "$toString": "$_id" } }
+  let { userId } = req.body;
+  try {
+    const result = await FriendList.aggregate([
+      {
+        $match: {
+          $expr: {
+            userId: userId,
           },
-        {
-          $lookup:
-            {
-              from: "BasicInfo",
-              localField: "_id",
-              foreignField: "userId",
-              as: "User"
-            }
-       },
+        },
+      },
+    ]);
 
-      
-     ]);
-      res.send(result);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server Error!");
-    }
-  });
-  module.exports = router;
+    let final = await BasicInfo.aggregate([
+      {
+        $match: {
+          $expr: {
+            $in: [userId, result[0].friends],
+          },
+        },
+      },
+      {
+        $project: {
+            userImages:  { $arrayElemAt: [ "$userImages", 0 ] },
+            userId:1
+        },
+      },
+      {
+        $lookup: {
+          from: "Profile",
+
+          let: { profileId: { $toObjectId: "$userId" } },
+
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$profileId"] } } },
+            {
+              $project: {
+                _id: 0,
+                fullName:{$concat: [ "$firstName", " ", "$lastName" ]},
+
+              },
+            },
+          ],
+
+          as: "Detail",
+        },
+      },
+      { $unwind: "$Detail" },
+
+    ]);
+
+    res.send(final);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error!");
+  }
+});
+module.exports = router;

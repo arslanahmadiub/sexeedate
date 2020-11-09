@@ -8,7 +8,7 @@ import vid4 from '../../videos/background.mp4'
 
  class Slider extends Component {
   render() {
-  
+    console.log(this.props.video)
       return (
         <div
           id={`carouselExample${this.props.id}`}
@@ -21,10 +21,10 @@ import vid4 from '../../videos/background.mp4'
               
                <video
                 playsInline="playsinline"
-                autoPlay="autoplay"
+                
               
-                loop="loop"
-                muted
+              
+                controls
                 style={{ 
                   width:"100%", height:"300px",objectFit:"cover"
                   }}

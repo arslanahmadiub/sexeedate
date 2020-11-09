@@ -18,6 +18,7 @@ import { friendGet } from "../../services/friendGet";
 import { deCodeId } from "../../services/userId";
 import { chatGet } from "../../services/chat";
 import { postGet } from "../../services/post";
+import { findFriendRequest } from "../../services/friendGet";
 import { useDispatch } from "react-redux";
 import { getFullUserDetail } from "../../services/profile";
 import { userId } from "../../action/userIdAction";
@@ -30,8 +31,9 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Chatbox from "./Chatbox";
 import MessageList from "./MessageList";
 import { unreadMessages } from "../../action/userIdAction";
+import { setFriendRequestData } from "../../action/friendRequestAction";
 import FriendRequestList from "./FriendRequestList";
-import FriendCard from './FriendCard'
+import FriendCard from "./FriendCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,14 +63,20 @@ function Timeline() {
   const [showChatBox, setShowChatBox] = useState(false);
   const [friendName, setFriendName] = useState("");
   const [postData, setPostData] = useState([]);
+  
   const dispatch = useDispatch();
   const showDispatch = useDispatch();
+  const friendRequestDispatch = useDispatch();
 
   const friendDispatch = useDispatch();
   const show = useSelector((state) => state.userId.showMessage);
   const unreadDispatch = useDispatch();
   const friendMessages = useSelector((state) => state.userId.messageFriendList);
   const currentUser = useSelector((state) => state.userId.users[0]._id);
+ 
+
+
+
   const [friendData, setFriendData] = useState({
     friendId: "",
     friendName: "",
@@ -77,7 +85,7 @@ function Timeline() {
 
   const classes = useStyles();
   const history = useHistory();
-
+ 
   let [friend, setFriend] = useState([]);
 
   useEffect(() => {
@@ -85,7 +93,16 @@ function Timeline() {
     fetchPostData();
     setUser();
     fetchChataData();
+    if(currentUser.length>0){
+
+    }
   }, []);
+
+  useEffect(() => {
+   
+    getFriendRequest();
+
+  }, [currentUser])
 
   const handleMessenger = () => {
     history.push("/chat");
@@ -104,11 +121,23 @@ function Timeline() {
 
   const handelFriendClick = async (e) => {
     await setShowChatBox(true);
-  
+
     await setFriendData(e);
     myRef.current.fetchMessages();
-
   };
+
+  let getFriendRequest=async()=>{
+    if(currentUser.length>0){
+      let user ={
+        userId:currentUser
+      }
+      let {data}= await  findFriendRequest(user);
+
+    await  friendRequestDispatch(setFriendRequestData(data))
+    
+    }
+
+  }
 
   const closeChatBox = async (e) => {
     await setShowChatBox(false);
@@ -146,7 +175,7 @@ function Timeline() {
   };
 
   let setUser = async () => {
-    let result =await deCodeId()
+    let result = await deCodeId();
     let id = {
       userId: result,
     };
@@ -170,9 +199,9 @@ function Timeline() {
           avatar: data[i].Image.userImages.imageUrl,
           lastMessage: data[i].Chat[data[i].Chat.length - 1].message,
           id: data[i]._id,
-          read:data[i].Chat[data[i].Chat.length - 1].read,
-          senderId:data[i].Chat[data[i].Chat.length - 1].senderId,
-          receiverId:data[i].Chat[data[i].Chat.length - 1].receiverId,
+          read: data[i].Chat[data[i].Chat.length - 1].read,
+          senderId: data[i].Chat[data[i].Chat.length - 1].senderId,
+          receiverId: data[i].Chat[data[i].Chat.length - 1].receiverId,
         };
         friendArray.push(friend);
       }
@@ -180,39 +209,44 @@ function Timeline() {
     friendDispatch(messageFriendList(friendArray));
   };
 
-  let friendId=async(e)=>{
-   
-    let data ={
+  let friendId = async (e) => {
+    let data = {
       friendId: e.id,
       friendName: e.name,
-      friendImage: e.avatar
-    }
-    setFriendData(data)
+      friendImage: e.avatar,
+    };
+    setFriendData(data);
     await setShowChatBox(true);
     myRef.current.fetchMessages();
+  };
 
-  }
-
-  let countUnread =()=>{
-    fetchChataData()
-    let count =0;
-    for (let i=0; i<friendMessages.length; i++){
-        if(friendMessages[i].receiverId === currentUser  && friendMessages[i].read ==false   ){
-            count++
-        }
+  let countUnread = () => {
+    fetchChataData();
+    let count = 0;
+    for (let i = 0; i < friendMessages.length; i++) {
+      if (
+        friendMessages[i].receiverId === currentUser &&
+        friendMessages[i].read == false
+      ) {
+        count++;
+      }
     }
-    
-    unreadDispatch(unreadMessages(count))
-    console.log(count)
-    console.log(friendMessages)
-  }
+
+    unreadDispatch(unreadMessages(count));
+    console.log(count);
+    console.log(friendMessages);
+  };
 
   return (
     <div className={classes.root}>
-      <MessageList change={(data)=>{friendId(data)}}/>
-      <FriendRequestList/>
+      <MessageList
+        change={(data) => {
+          friendId(data);
+        }}
+      />
+      <FriendRequestList />
       <SearchAppBar />
-      <FriendCard/>
+      <FriendCard />
 
       <Grid container className={classes.mainContainer}>
         <Chatbox
@@ -221,7 +255,7 @@ function Timeline() {
           name={friendData.friendName}
           image={friendData.friendImage}
           id={friendData.friendId}
-          update={()=>countUnread()}
+          update={() => countUnread()}
           ref={myRef}
         />
 
