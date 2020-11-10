@@ -5,6 +5,7 @@ import {workPost} from '../../services/work'
 import {workGet} from '../../services/work'
 import {deCodeId} from '../../services/userId'
 import SearchAppBar from "../Timline/SearchAppBar";
+import SearchBar from "../Timline/SearchBar";
 class Work extends Component {
   state = {
     display: "block",
@@ -124,7 +125,8 @@ class Work extends Component {
     return (
       <React.Fragment>
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
-          <SearchAppBar/>
+          {/* <SearchAppBar/> */}
+          <SearchBar/>
           <div
             className="container"
             style={{

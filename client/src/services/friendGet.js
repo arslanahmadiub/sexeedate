@@ -20,7 +20,7 @@ export async function sendFriendRequest(data) {
   return await axios.post(friendRequestSendUrl, data);
 }
 
-export async function findFriendRequest(data) {
+export async function findRequest(data) {
   return await axios.post(findFriendRequestUrl, data);
 }
 export async function deleteFriendRequest(data) {

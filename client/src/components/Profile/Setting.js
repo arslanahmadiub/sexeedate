@@ -6,6 +6,7 @@ import { placePost } from "../../services/place";
 import { placeGet } from "../../services/place";
 import { deCodeId } from "../../services/userId";
 import SearchAppBar from "../Timline/SearchAppBar";
+import SearchBar from "../Timline/SearchBar";
 
 class Setting extends Component {
   state = {
@@ -33,7 +34,8 @@ class Setting extends Component {
     return (
       <React.Fragment>
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
-          <SearchAppBar />
+          {/* <SearchAppBar /> */}
+          <SearchBar/>
           <div
             className="container"
             style={{

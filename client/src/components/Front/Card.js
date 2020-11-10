@@ -12,7 +12,8 @@ import ShowMoreText  from 'react-show-more-text';
 class Card extends Component {
   state = {};
 
-  handelFriendRequest = async () => {
+  handelFriendRequest = async (e) => {
+    this.props.change(e)
     let senderId = await deCodeId();
 
     let data = {
@@ -21,7 +22,15 @@ class Card extends Component {
       friendStatus: "sent",
     };
     let result = await sendFriendRequest(data);
+
   };
+
+
+
+  handelDislikeRequest = (e)=>{
+    
+    this.props.change(e)
+  }
   render() {
     return (
       <div className="card w-100" style={{ border: "3px solid #B71C1C" }}>
@@ -45,7 +54,8 @@ class Card extends Component {
           </p>
 
           <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <IconButton component="span" onClick={this.handelFriendRequest}>
+            <IconButton component="span" onClick={()=>{this.handelFriendRequest(this.props.id)}}>
+            
               <ThumbUpIcon
                 style={{
                   color: "#BA1D1D",
@@ -55,7 +65,7 @@ class Card extends Component {
                 }}
               />
             </IconButton>
-            <IconButton component="span">
+            <IconButton component="span" onClick={()=>{this.handelDislikeRequest(this.props.id)}}>
               <ThumbDownIcon
                 style={{
                   color: "#BA1D1D",

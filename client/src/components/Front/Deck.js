@@ -9,6 +9,7 @@ import SearchAppBar from "../Timline/SearchAppBar";
 import { deCodeId } from "../../services/userId";
 import { matchGet } from "../../services/matching";
 import { getUserGender } from "../../services/profile";
+import SearchBar from "../Timline/SearchBar";
 let { AgeFromDateString, AgeFromDate } = require("age-calculator");
 
 class Deck extends Component {
@@ -62,7 +63,15 @@ class Deck extends Component {
   
    await this.setState({data})
    
+   
   };
+
+  removeObject =(id)=>{
+    let newData = [...this.state.data];
+    let result=newData.filter(item=>item._id !== id)
+    this.setState({data:result})
+  
+  }
 
   getAge = (data) => {
     let ageFromString = new AgeFromDateString(data).age;
@@ -75,18 +84,21 @@ class Deck extends Component {
           className="mt-4"
           style={{ width: "100vw", height: "100vh", overflow: "auto" }}
         >
-          <SearchAppBar />
+          {/* <SearchAppBar /> */}
+          <SearchBar/>
           <div className="swiper-container" style={{ marginTop: "12vh" }}>
             <div className="swiper-wrapper">
 
 
-            {this.state.data.map((item, index) => {
+            {this.state.data.length>0 ?this.state.data.map((item, index) => {
                 return (
                   <div className="swiper-slide " key={index}>
-                    <Card id={item._id} images={item.Detail.userImages} name={item.fullName} age={this.getAge(item.dob)} video={item.Detail.video.image_url} bio ={item.Detail.bio} />
+                    <Card id={item._id} images={item.Detail.userImages} name={item.fullName} age={this.getAge(item.dob)} video={item.Detail.video.image_url} bio ={item.Detail.bio}  change={(data)=>this.removeObject(data)}/>
                   </div>
                 );
-              })}
+              }): 
+                <div style={{display:"flex", width:"100vw", height:"70vh", justifyContent:"center", alignItems:"center"}}><h1>No Matching Found...</h1></div>
+              }
 
             </div>
           </div>

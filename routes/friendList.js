@@ -10,21 +10,44 @@ router.post("/", async (req, res) => {
       userId,
       friends,
     });
+    let secondFriendList = new FriendList({
+      userId:friends,
+      friends:userId
+    });
+
+
 
     let user = await FriendList.find({ userId: userId });
+    let secondUser = await FriendList.find({ userId: friends });
 
     if (user.length < 1) {
       await friendList.save();
-      res.send("success");
-    } else {
+      
+    }
+    if (secondUser.length < 1) {
+      await secondFriendList.save();
+      
+    }
+    if(user.length>0){
+
       let result = await FriendList.updateOne(
         { userId: req.body.userId },
         { $push: { friends: req.body.friends } }
       );
-      res.send(result);
+    
+    }
+    if(secondUser.length>0){
 
+      let secondResult = await FriendList.updateOne(
+        { userId: req.body.friends },
+        { $push: { friends: req.body.userId } }
+      );
+      
+    
     }
     
+
+    res.send("Success")
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error!");

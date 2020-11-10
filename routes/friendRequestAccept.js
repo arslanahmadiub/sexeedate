@@ -1,5 +1,4 @@
 const express = require("express");
-
 const router = express.Router();
 const FriendRequest = require("../models/FriendRequest");
 
@@ -24,7 +23,7 @@ router.post("/", async (req, res) => {
                 video: 1,
                 bio: 1,
                 userImages: 1,
-                userId:1
+                userId: 1,
               },
             },
           ],
@@ -46,7 +45,7 @@ router.post("/", async (req, res) => {
               $project: {
                 _id: 0,
                 fullName: { $concat: ["$firstName", " ", "$lastName"] },
-                dob:1
+                dob: 1,
               },
             },
           ],

@@ -12,6 +12,7 @@ import { multiFileUpload } from "../../services/multiFileUpload";
 import { basicInfo } from "../../services/basicInfo";
 import { basicInfoGet } from "../../services/basicInfo";
 import SearchAppBar from "../Timline/SearchAppBar";
+import SearchBar from "../Timline/SearchBar";
 const jwt = require("jsonwebtoken");
 
 class Basic extends Component {
@@ -250,7 +251,8 @@ class Basic extends Component {
     return (
       <React.Fragment>
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
-          <SearchAppBar />
+          {/* <SearchAppBar /> */}
+          <SearchBar/>
           <div
             className="container"
             style={{

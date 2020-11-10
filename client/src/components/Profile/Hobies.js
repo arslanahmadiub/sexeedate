@@ -7,6 +7,7 @@ import { hobbyPost } from "../../services/hobby";
 import { hobbyGet } from "../../services/hobby";
 import { deCodeId } from "../../services/userId";
 import SearchAppBar from "../Timline/SearchAppBar";
+import SearchBar from "../Timline/SearchBar";
 
 function Hobies() {
   let [covid, setCovid] = useState("block");
@@ -78,7 +79,8 @@ function Hobies() {
   return (
     <React.Fragment>
       <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
-        <SearchAppBar/>
+        {/* <SearchAppBar/> */}
+        <SearchBar/>
         <div
           className="container"
           style={{

@@ -74,7 +74,7 @@ function FriendRequestList(props) {
   const friendRequestData = useSelector(
     (state) => state.friendRequest.freindRequest
   );
- console.log(friendRequestData)
+
 
 
 
@@ -101,8 +101,8 @@ function FriendRequestList(props) {
     }
     if (currentUser.length > 0) {
       let data = {
-        friendOne: currentUser,
-        friendTwo: item.senderId,
+        userId: currentUser,
+        friends: item.senderId,
       };
       await addFriendInList(data);
       await deleteFriendDispatch(deleteFriendRequestAction(item._id))

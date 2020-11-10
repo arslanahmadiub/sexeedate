@@ -18,7 +18,7 @@ import { friendGet } from "../../services/friendGet";
 import { deCodeId } from "../../services/userId";
 import { chatGet } from "../../services/chat";
 import { postGet } from "../../services/post";
-import { findFriendRequest } from "../../services/friendGet";
+import { findRequest } from "../../services/friendGet";
 import { useDispatch } from "react-redux";
 import { getFullUserDetail } from "../../services/profile";
 import { userId } from "../../action/userIdAction";
@@ -63,7 +63,7 @@ function Timeline() {
   const [showChatBox, setShowChatBox] = useState(false);
   const [friendName, setFriendName] = useState("");
   const [postData, setPostData] = useState([]);
-  
+
   const dispatch = useDispatch();
   const showDispatch = useDispatch();
   const friendRequestDispatch = useDispatch();
@@ -73,9 +73,6 @@ function Timeline() {
   const unreadDispatch = useDispatch();
   const friendMessages = useSelector((state) => state.userId.messageFriendList);
   const currentUser = useSelector((state) => state.userId.users[0]._id);
- 
-
-
 
   const [friendData, setFriendData] = useState({
     friendId: "",
@@ -85,7 +82,7 @@ function Timeline() {
 
   const classes = useStyles();
   const history = useHistory();
- 
+
   let [friend, setFriend] = useState([]);
 
   useEffect(() => {
@@ -93,16 +90,13 @@ function Timeline() {
     fetchPostData();
     setUser();
     fetchChataData();
-    if(currentUser.length>0){
-
+    if (currentUser.length > 0) {
     }
   }, []);
 
   useEffect(() => {
-   
     getFriendRequest();
-
-  }, [currentUser])
+  }, [currentUser]);
 
   const handleMessenger = () => {
     history.push("/chat");
@@ -122,22 +116,25 @@ function Timeline() {
   const handelFriendClick = async (e) => {
     await setShowChatBox(true);
 
-    await setFriendData(e);
+    let friendData = {
+      friendId: e.userId,
+      friendName: e.Detail.fullName,
+      friendImage: e.userImages.imageUrl,
+    };
+    await setFriendData(friendData);
     myRef.current.fetchMessages();
   };
 
-  let getFriendRequest=async()=>{
-    if(currentUser.length>0){
-      let user ={
-        userId:currentUser
-      }
-      let {data}= await  findFriendRequest(user);
+  let getFriendRequest = async () => {
+    if (currentUser.length > 0) {
+      let user = {
+        userId: currentUser,
+      };
+      let { data } = await findRequest(user);
 
-    await  friendRequestDispatch(setFriendRequestData(data))
-    
+      await friendRequestDispatch(setFriendRequestData(data));
     }
-
-  }
+  };
 
   const closeChatBox = async (e) => {
     await setShowChatBox(false);
@@ -147,21 +144,9 @@ function Timeline() {
     let id = await deCodeId();
     let userId = { userId: id };
     let { data } = await friendGet(userId);
-    let friendArray = [];
-
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].User.length > 0) {
-        let friendData = {
-          friendId: data[i]._id,
-          friendImage: data[i].User[0].userImages[0].imageUrl,
-          friendName: data[i].firstName + " " + data[i].lastName,
-        };
-        friendArray.push(friendData);
-      }
-    }
-
+    console.log(data)
     if (data) {
-      setFriend(friendArray);
+      setFriend(data);
     }
   };
 
@@ -323,14 +308,13 @@ function Timeline() {
 
             {friend.map((item, id) => {
               return (
-                <div key={item.friendId}>
+                <div key={id}>
                   <div
                     className="friendsList"
                     onClick={() => handelFriendClick(item)}
-                    key={item.friendId}
                   >
-                    <Avatar alt="Remy Sharp" src={item.friendImage} />
-                    <h5>{item.friendName}</h5>
+                    <Avatar alt="Remy Sharp" src={item.userImages.imageUrl} />
+                    <h5>{item.Detail.fullName}</h5>
                   </div>
                   <hr
                     style={{

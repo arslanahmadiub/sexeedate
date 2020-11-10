@@ -5,6 +5,7 @@ import { covidPost } from "../../services/covid";
 import { covidGet } from "../../services/covid";
 import { deCodeId } from "../../services/userId";
 import SearchAppBar from "../Timline/SearchAppBar";
+import SearchBar from "../Timline/SearchBar";
 
 class Covid extends Component {
   state = {
@@ -90,7 +91,8 @@ class Covid extends Component {
     return (
       <React.Fragment>
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
-          <SearchAppBar/>
+          {/* <SearchAppBar/> */}
+          <SearchBar/>
           <div
             className="container"
             style={{
