@@ -76,7 +76,7 @@ router.post("/", async (req, res) => {
     res.send(profile);
 
     // here we send email for confirmuation
-   let url= `http://67.207.95.173:5000/confirm?token=${token}`
+   let url= `http://157.230.228.67:5000/confirm?token=${token}`
     
    mail(url,email)
 

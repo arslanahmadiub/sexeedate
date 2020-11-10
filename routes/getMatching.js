@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
       }
     });
 
-    console.log(receiverId);
+   
     const result1 = await FriendList.aggregate([
       { $match: { userId: { $eq: userId } } },
     ]);

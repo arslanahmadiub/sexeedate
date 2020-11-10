@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
       return res.status(400).send("User of this email is not exist");
     } else {
       const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
-      let url = `http://localhost:3000/#/forgot?token=${token}`;
+      let url = `http://157.230.228.67/#/forgot?token=${token}`;
       mail(url, email);
       res.send(user);
     }

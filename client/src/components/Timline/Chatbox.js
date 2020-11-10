@@ -13,11 +13,11 @@ import "./Timeline.css";
 
 
 // const socketUrl ="http://67.207.95.173:5000";
-const socketUrl ="http://localhost:5000";
+const socketUrl ="http://157.230.228.67:5000";
 
 class Chatbox extends Component {
   state = {
-    endPoint: "http://localhost:5000",
+    endPoint: "http://157.230.228.67:5000",
     chatShow: this.props.show,
     friendName: this.props.name,
     friendId: this.props.id,

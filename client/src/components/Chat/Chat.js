@@ -14,12 +14,12 @@ import { userImageGet } from "../../services/friendGet";
 import IconButton from "@material-ui/core/IconButton";
 import "./chat.css";
 
-const socketUrl ="http://67.207.95.173:5000";
+const socketUrl ="http://157.230.228.67:5000";
 
 class Chat extends Component {
   state = { 
     curTime: new Date().toLocaleString(),
-    endPoint: "http://67.207.95.173:5000",
+    endPoint: "http://157.230.228.67:5000",
     chatMember: [],
     chatText: "",
     chat: [],
