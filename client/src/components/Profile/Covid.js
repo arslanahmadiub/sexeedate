@@ -4,14 +4,16 @@ import { Link } from "react-router-dom";
 import { covidPost } from "../../services/covid";
 import { covidGet } from "../../services/covid";
 import { deCodeId } from "../../services/userId";
-import SearchAppBar from "../Timline/SearchAppBar";
 import SearchBar from "../Timline/SearchBar";
+import Alert from "react-bootstrap/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class Covid extends Component {
   state = {
     covid: "block",
     covidFrom: "none",
-
+    loading: false,
+    alertShow: false,
     questionData: {
       question1: "",
       question2: "",
@@ -28,9 +30,29 @@ class Covid extends Component {
   handelCovid = () => {
     this.setState({ covid: "none", covidFrom: "block" });
   };
-  handelCovidForm =async () => {
-    await this.postCovidData();
-    this.setState({covid:"block", covidFrom:"none"})
+  handelCovidForm = async () => {
+    let {
+      question1,
+      question2,
+      question3,
+      question4,
+      question5,
+    } = this.state.questionData;
+
+    if (
+      question1.length < 1 ||
+      question2.length < 1 ||
+      question3.length < 1 ||
+      question4.length < 1 ||
+      question5.length < 1
+    ) {
+      this.setState({ alertShow: true });
+    } else {
+      this.setState({ alertShow: false, loading: true });
+      await this.postCovidData();
+      this.setState({ covid: "block", covidFrom: "none" });
+      this.setState({ loading: false });
+    }
   };
 
   fetchCovidData = async () => {
@@ -39,15 +61,18 @@ class Covid extends Component {
       userId: id,
     };
     let { data } = await covidGet(userId);
-    let { question1, question2, question3, question4, question5 } = data;
-    let resultData = {
-      question1,
-      question2,
-      question3,
-      question4,
-      question5,
-    };
-    await this.setState({ questionData: resultData });
+
+    if (data) {
+      let { question1, question2, question3, question4, question5 } = data;
+      let resultData = {
+        question1,
+        question2,
+        question3,
+        question4,
+        question5,
+      };
+      await this.setState({ questionData: resultData });
+    }
   };
 
   handleQuestionChange = async (e) => {
@@ -80,7 +105,13 @@ class Covid extends Component {
 
   render() {
     let { covid, covidFrom } = this.state;
-    let { question1, question2, question3, question4, question5 } = this.state.questionData;
+    let {
+      question1,
+      question2,
+      question3,
+      question4,
+      question5,
+    } = this.state.questionData;
     let covidStyle = {
       display: covid,
     };
@@ -92,7 +123,7 @@ class Covid extends Component {
       <React.Fragment>
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
           {/* <SearchAppBar/> */}
-          <SearchBar/>
+          <SearchBar />
           <div
             className="container"
             style={{
@@ -115,7 +146,7 @@ class Covid extends Component {
             <br />
             <div className="row">
               <div className="col-md-3  " style={{ textAlign: "center" }}>
-                <div class="sidenav">
+                <div className="sidenav">
                   <Link to="/basicinfo" style={{ marginTop: "5px" }}>
                     Basic Info
                   </Link>
@@ -140,12 +171,11 @@ class Covid extends Component {
                   >
                     Covid Question
                   </Link>
-                  <Link
-                    to="/setting"
-                    style={{ marginTop: "5px" }}
-                    
-                  >
+                  <Link to="/setting" style={{ marginTop: "5px" }}>
                     Setting
+                  </Link>
+                  <Link to="/payment" style={{ marginTop: "5px" }}>
+                    Payment
                   </Link>
                 </div>
               </div>
@@ -153,6 +183,13 @@ class Covid extends Component {
                 className="col-md-9 profile"
                 style={{ padding: "25px", color: "white" }}
               >
+                <Alert show={this.state.alertShow} variant="danger">
+                  <p>Fill All Fields</p>
+                </Alert>
+                <div style={this.state.loading ? loadingStyle : unLoadingStyle}>
+                  <CircularProgress color="inherit" />
+                </div>
+
                 {/* Work Section */}
                 <h3 style={{ textAlign: "center" }}>Survey About Covid 19</h3>
                 <div style={covidStyle}>
@@ -167,7 +204,7 @@ class Covid extends Component {
                   <h5 className="mt-3">
                     Q: Are you open to meeting in-person?
                   </h5>
-          <h5 className="mt-3">{question2}</h5>
+                  <h5 className="mt-3">{question2}</h5>
 
                   <h5 className="mt-3">
                     Q: Will you want to keep social distance?
@@ -194,7 +231,6 @@ class Covid extends Component {
                     onChange={this.handleQuestionChange}
                   />
                   <h5 className="mt-3">
-                  
                     Q: Are you open to meeting in-person?
                   </h5>
                   <input
@@ -206,7 +242,6 @@ class Covid extends Component {
                     onChange={this.handleQuestionChange}
                   />
                   <h5 className="mt-3">
-                    {" "}
                     Q: Will you want to keep social distance?
                   </h5>
                   <input
@@ -218,7 +253,6 @@ class Covid extends Component {
                     onChange={this.handleQuestionChange}
                   />
                   <h5 className="mt-3">
-               
                     Q: Are you OK shaking hands or hugging your date?
                   </h5>
                   <input
@@ -240,7 +274,7 @@ class Covid extends Component {
                   />
                   <button
                     type="button"
-                    class="btn btn-success mt-3"
+                    className="btn btn-success mt-3"
                     style={{ float: "right" }}
                     onClick={this.handelCovidForm}
                   >
@@ -260,3 +294,29 @@ class Covid extends Component {
 }
 
 export default Covid;
+
+const loadingStyle = {
+  zIndex: 50,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  background: "rgba(0, 0, 0, 0.8)",
+  width: "100vw",
+  height: "100vh",
+  position: "absolute",
+  top: "0",
+  left: "0",
+};
+
+const unLoadingStyle = {
+  zIndex: -50,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  background: "rgba(0, 0, 0, 0.8)",
+  width: "100vw",
+  height: "100vh",
+  position: "absolute",
+  top: "0",
+  left: "0",
+};

@@ -20,7 +20,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import "./admin.css";
 import MaterialTableDemo from "./MaterialTableDemo";
-
+import ListAltIcon from '@material-ui/icons/ListAlt';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -103,6 +103,9 @@ export default function Admin() {
   const handleVerification = () => {
     history.push("/admin/verify");
   };
+  const handlePackages = () => {
+    history.push("/admin/package");
+  };
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -170,6 +173,13 @@ export default function Admin() {
               <MailIcon />
             </ListItemIcon>
             <ListItemText primary="Verification" />
+          </ListItem>
+          <ListItem button onClick={handlePackages}>
+            <ListItemIcon>
+             
+              <ListAltIcon />
+            </ListItemIcon>
+            <ListItemText primary="Packages" />
           </ListItem>
         </List>
       </Drawer>

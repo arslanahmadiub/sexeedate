@@ -28,6 +28,7 @@
     "react-scroll": "^1.8.1",
     "react-show-more-text": "^1.4.4",
     "react-spring": "^7.2.11",
+    "react-stripe-checkout": "^2.6.3",
     "react-toastify": "^6.1.0",
     "react-with-gesture": "^4.0.8",
     "redux": "^4.0.5",

@@ -88,3 +88,22 @@ h1 {
   visibility: visible !important;
   display: block;
 }
+
+#dropdown-basic{
+  background-color: #B71C1C;
+ border: none;
+ box-shadow: none;
+}
+#priceButton{
+  background-color: #B71C1C;
+  border: none;
+  box-shadow: none;
+}
+
+.profile span {
+  color: #ffffff;
+}
+
+.checkOutButton{
+  display: none
+}

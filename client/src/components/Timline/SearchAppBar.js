@@ -54,7 +54,7 @@ export default function SearchAppBar() {
   const userFullName = useSelector((state) => state.userId.users[0].firstName);
 
   const unread = useSelector((state) => state.userId.unreadMessages);
-
+   
   useEffect(() => {
     if (users && userImage.length < 1) {
       setUserImage(users);
@@ -109,6 +109,45 @@ export default function SearchAppBar() {
    
     showCardDispatch(showFriendRequestBox(!showCard))
   };
+
+  let badgeWithValue =()=>{
+    if(unread){
+      return(
+
+        <Badge
+        badgeContent={unread}
+        
+         color="primary"
+         classes={{ badge: classes.customBadge }}
+       >
+         <ChatBubbleIcon
+           style={{
+             color: "#B71C1C",
+           }}
+         />
+       </Badge>
+      )
+    }
+    else{
+      return(
+
+        <Badge
+      
+        
+         color="primary"
+         classes={{ badge: classes.customBadge }}
+       >
+         <ChatBubbleIcon
+           style={{
+             color: "#B71C1C",
+           }}
+         />
+       </Badge>
+      )
+    }
+
+   
+  }
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
@@ -158,17 +197,7 @@ export default function SearchAppBar() {
               </div>
               <div className="toolbarItems">
                 <IconButton onClick={handelMessenger}>
-                  <Badge
-                    badgeContent={unread}
-                    color="primary"
-                    classes={{ badge: classes.customBadge }}
-                  >
-                    <ChatBubbleIcon
-                      style={{
-                        color: "#B71C1C",
-                      }}
-                    />
-                  </Badge>
+                 {badgeWithValue()}
                 </IconButton>
               </div>
 

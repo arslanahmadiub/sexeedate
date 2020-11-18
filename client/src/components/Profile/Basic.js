@@ -2,16 +2,12 @@ import React, { Component } from "react";
 import { DropzoneArea } from "material-ui-dropzone";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { makeStyles } from "@material-ui/core/styles";
-import Backdrop from "@material-ui/core/Backdrop";
-
 import "./Profile.css";
 import { Link } from "react-router-dom";
 import { fileUpload } from "../../services/singleFileUpload";
 import { multiFileUpload } from "../../services/multiFileUpload";
 import { basicInfo } from "../../services/basicInfo";
 import { basicInfoGet } from "../../services/basicInfo";
-import SearchAppBar from "../Timline/SearchAppBar";
 import SearchBar from "../Timline/SearchBar";
 const jwt = require("jsonwebtoken");
 
@@ -307,6 +303,9 @@ class Basic extends Component {
                   >
                     Setting
                   </Link>
+                  <Link to="/payment" style={{ marginTop: "5px" }}>
+                  Payment
+                </Link>
                 </div>
               </div>
               <div

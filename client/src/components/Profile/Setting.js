@@ -2,10 +2,7 @@ import React, { Component } from "react";
 
 import "./Profile.css";
 import { Link } from "react-router-dom";
-import { placePost } from "../../services/place";
-import { placeGet } from "../../services/place";
-import { deCodeId } from "../../services/userId";
-import SearchAppBar from "../Timline/SearchAppBar";
+
 import SearchBar from "../Timline/SearchBar";
 
 class Setting extends Component {
@@ -19,7 +16,7 @@ class Setting extends Component {
   };
 
   handelPassword = () => {
-    console.log(this.state.UpdatePassword);
+    
     this.setState({update:true})
     setTimeout(() => {
     this.setState({update:false})
@@ -58,7 +55,7 @@ class Setting extends Component {
             <br />
             <div className="row">
               <div className="col-md-3  " style={{ textAlign: "center" }}>
-                <div class="sidenav">
+                <div className="sidenav">
                   <Link to="/basicinfo" style={{ marginTop: "5px" }}>
                     Basic Info
                   </Link>
@@ -86,6 +83,9 @@ class Setting extends Component {
                   >
                     Setting
                   </Link>
+                  <Link to="/payment" style={{ marginTop: "5px" }}>
+                  Payment
+                </Link>
                 </div>
               </div>
               <div
@@ -107,7 +107,7 @@ class Setting extends Component {
                   />
                   <button
                     type="button"
-                    class="btn btn-success mt-3"
+                    className="btn btn-success mt-3"
                     style={{ float: "right" }}
                     onClick={this.handelPassword}
                   >

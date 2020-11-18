@@ -2,6 +2,9 @@ const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
 const cors = require("cors");
+const stripe = require("stripe")("sk_test_51HnRucEeHt0CNn6ZQSurKasE1mKXRTpusE1YFWsBrpYfjaCuh48aJUwLdCw5RTQu9JKOYNu2UDsLEjMCtTVulzNj00jL52moSY");
+const { v4: uuidv4, v4 } = require('uuid');
+
 
 const connectDB = require("./config/db");
 
@@ -33,6 +36,24 @@ io.on("connect", (socket) => {
 
 });
 // io.on("connect", SocketManager);
+
+app.post("/payment", (req, res) => {
+  const { product, token } = req.body;
+  console.log("PRODUCT ", product);
+  console.log("PRICE ", product.price);
+  const idempontencyKey = v4();
+
+  return stripe.customers
+    .create({
+      email: token.email,
+      source: token.id,
+    })
+
+    .then((result) => res.status(200).json(result))
+    .catch((err) => console.log(err));
+});
+
+
 
 
 app.use("/images", express.static("upload/images"))
@@ -80,6 +101,11 @@ app.use("/sendFriendRequest", require("./routes/friendRequest"));
 app.use("/findFriendRequest", require("./routes/friendRequestAccept"));
 app.use("/deleteFriendRequest", require("./routes/deleteFriendRequest"));
 app.use("/addFriend", require("./routes/friendList"));
+app.use("/chatMessageNumberGet", require("./routes/chatNumerGet"));
+app.use("/packagePost", require("./routes/packagesPost"));
+app.use("/packageGet", require("./routes/packageGet"));
+app.use("/packageDelete", require("./routes/deletePackage"));
+
 
 app.get("/confirm", require("./routes/confirmEmail"));
 

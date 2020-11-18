@@ -20,6 +20,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import "./admin.css";
 import PostTable from "./PostTable";
+import ListAltIcon from '@material-ui/icons/ListAlt';
 
 const drawerWidth = 240;
 
@@ -103,6 +104,10 @@ export default function Post() {
   const handleVerification = () => {
     history.push("/admin/verify");
   };
+  const handlePackages = () => {
+    history.push("/admin/package");
+  };
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -152,15 +157,15 @@ export default function Post() {
         <List>
           <ListItem button onClick={handleUser}>
             <ListItemIcon>
-              {" "}
-              <InboxIcon />{" "}
+               
+              <InboxIcon /> 
             </ListItemIcon>
             <ListItemText primary="Users" />
           </ListItem>
           <ListItem button onClick={handlePost}>
             <ListItemIcon>
-              {" "}
-              <MailIcon />{" "}
+               
+              <MailIcon /> 
             </ListItemIcon>
             <ListItemText primary="Post" />
           </ListItem>
@@ -170,6 +175,13 @@ export default function Post() {
               <MailIcon />
             </ListItemIcon>
             <ListItemText primary="Verification" />
+          </ListItem>
+          <ListItem button onClick={handlePackages}>
+            <ListItemIcon>
+             
+              <ListAltIcon />
+            </ListItemIcon>
+            <ListItemText primary="Packages" />
           </ListItem>
         </List>
       </Drawer>

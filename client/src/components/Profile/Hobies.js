@@ -6,39 +6,79 @@ import { Link } from "react-router-dom";
 import { hobbyPost } from "../../services/hobby";
 import { hobbyGet } from "../../services/hobby";
 import { deCodeId } from "../../services/userId";
-import SearchAppBar from "../Timline/SearchAppBar";
 import SearchBar from "../Timline/SearchBar";
+import Alert from "react-bootstrap/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 function Hobies() {
   let [covid, setCovid] = useState("block");
   let [covidForm, setCovidForm] = useState("none");
   let [hobby, setHobby] = useState("");
   let [hobbies, setHobbies] = useState([]);
+  let [alertShow, setAlertShow] = useState(false);
+  let [loading, setLoading] = useState(false);
+    
 
+  const loadingStyle = {
+    zIndex: 50,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    background: "rgba(0, 0, 0, 0.8)",
+    width: "100vw",
+    height: "100vh",
+    position: "absolute",
+    top: "0",
+    left: "0",
+  };
+  
+  const unLoadingStyle = {
+    zIndex: -50,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    background: "rgba(0, 0, 0, 0.8)",
+    width: "100vw",
+    height: "100vh",
+    position: "absolute",
+    top: "0",
+    left: "0",
+  };
 
   useEffect(() => {
-    getHobby()
-  },[]);
+    getHobby();
+  }, []);
   let handelCovid = () => {
     setCovid("none");
     setCovidForm("block");
   };
   let handelCovidForm = () => {
-    postHobby();
-    setCovid("block");
-    setCovidForm("none");
+    if(hobbies.length <1){
+      setAlertShow(true)
+    }
+    else{
+      setAlertShow(false)
+      setLoading(true)
+      postHobby();
+      setLoading(false)
+      setCovid("block");
+      setCovidForm("none");
+
+    }
+
+
+
+    
   };
 
-
-  let getHobby =async ()=>{
+  let getHobby = async () => {
     let id = await deCodeId();
-    let user ={userId:id}
-    let {data} =await hobbyGet(user)
-    if(data){
-
-      await setHobbies(data.hobbies)
+    let user = { userId: id };
+    let { data } = await hobbyGet(user);
+    if (data) {
+      await setHobbies(data.hobbies);
     }
-  }
+  };
 
   let postHobby = async () => {
     let id = await deCodeId();
@@ -80,7 +120,7 @@ function Hobies() {
     <React.Fragment>
       <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
         {/* <SearchAppBar/> */}
-        <SearchBar/>
+        <SearchBar />
         <div
           className="container"
           style={{
@@ -103,7 +143,7 @@ function Hobies() {
           <br />
           <div className="row">
             <div className="col-md-3  " style={{ textAlign: "center" }}>
-              <div class="sidenav">
+              <div className="sidenav">
                 <Link to="/basicinfo" style={{ marginTop: "5px" }}>
                   Basic Info
                 </Link>
@@ -128,13 +168,12 @@ function Hobies() {
                 <Link to="/covid" style={{ marginTop: "5px" }}>
                   Covid Question
                 </Link>
-                <Link
-                    to="/setting"
-                    style={{ marginTop: "5px" }}
-                    
-                  >
-                    Setting
-                  </Link>
+                <Link to="/setting" style={{ marginTop: "5px" }}>
+                  Setting
+                </Link>
+                <Link to="/payment" style={{ marginTop: "5px" }}>
+                  Payment
+                </Link>
               </div>
             </div>
             <div
@@ -142,20 +181,24 @@ function Hobies() {
               style={{ padding: "25px", color: "white" }}
             >
               {/* Work Section */}
+              <Alert show={alertShow} variant="danger">
+                  <p>Fill All Fields</p>
+                </Alert>
+                <div style={loading ? loadingStyle : unLoadingStyle}>
+                  <CircularProgress color="inherit" />
+                </div>
               <h3 style={{ textAlign: "center" }}>Add Your Hobies</h3>
               <div style={covidStyle}>
-                <span style={{ fontSize: "25px" }} onClick={handelCovid}>
+                <span style={{ fontSize: "12px" }} onClick={handelCovid}>
                   Add Hobies
                 </span>
                 <div className="mt-3" id="hobies">
                   <ul>
-                    {hobbies.length ?  hobbies.map((item,index)=>{
-                      return(
-                      <li key={index}>{item}</li>
-                      )
-                    }):null}
-                   
-                
+                    {hobbies.length
+                      ? hobbies.map((item, index) => {
+                          return <li key={index}>{item}</li>;
+                        })
+                      : null}
                   </ul>
                 </div>
               </div>
@@ -167,6 +210,7 @@ function Hobies() {
                     <button
                       className="btn btn-outline-secondary ml-2 mt-2 languageButton"
                       value={index}
+                      key={index}
                     >
                       {item}
                       <DeleteForeverIcon
@@ -191,7 +235,7 @@ function Hobies() {
 
                 <button
                   type="button"
-                  class="btn btn-success mt-3"
+                  className="btn btn-success mt-3"
                   style={{ float: "right" }}
                   onClick={handelCovidForm}
                 >

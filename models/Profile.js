@@ -45,5 +45,13 @@ const profileSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  subStatus:{
+    type: String,
+    default:"Free"
+  },
+  subOverDate:{
+    type: String,
+   
+  }
 });
 module.exports = Profile = mongoose.model("profile", profileSchema, "Profile");

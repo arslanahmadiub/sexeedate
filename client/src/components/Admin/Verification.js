@@ -20,6 +20,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import "./admin.css";
 import CollapsibleTable from "./CollapsibleTable";
+import ListAltIcon from '@material-ui/icons/ListAlt';
 
 const drawerWidth = 240;
 
@@ -103,6 +104,10 @@ export default function Verification() {
   const handleVerification = () => {
     history.push("/admin/verify");
   };
+  const handlePackages = () => {
+    history.push("/admin/package");
+  };
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -152,24 +157,31 @@ export default function Verification() {
         <List>
           <ListItem button onClick={handleUser}>
             <ListItemIcon>
-              {" "}
-              <InboxIcon />{" "}
+             
+              <InboxIcon />
             </ListItemIcon>
             <ListItemText primary="Users" />
           </ListItem>
           <ListItem button onClick={handlePost}>
             <ListItemIcon>
-              {" "}
-              <MailIcon />{" "}
+            
+              <MailIcon />
             </ListItemIcon>
             <ListItemText primary="Post" />
           </ListItem>
           <ListItem button onClick={handleVerification}>
             <ListItemIcon>
-              {" "}
-              <MailIcon />{" "}
+             
+              <MailIcon />
             </ListItemIcon>
             <ListItemText primary="Verification" />
+          </ListItem>
+          <ListItem button onClick={handlePackages}>
+            <ListItemIcon>
+             
+              <ListAltIcon />
+            </ListItemIcon>
+            <ListItemText primary="Packages" />
           </ListItem>
         </List>
       </Drawer>

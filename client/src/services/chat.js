@@ -6,6 +6,7 @@ const chatPostUrl = apiEndPoint + "/chatPost";
 const chatGetUrl = apiEndPoint + "/chatGet";
 const friendWithChat = apiEndPoint + "/getFriendChat";
 const readLastChat = apiEndPoint + "/limitedChat";
+const chatNumberUrl = apiEndPoint + "/chatMessageNumberGet";
 
 export async function chatPost(data) {
 
@@ -30,4 +31,12 @@ export async function readLastMessage(data) {
 
     return await axios.post(readLastChat, data);
   }
-  
+
+export async function chatNumberGet(data) {
+
+
+    return await axios.post(chatNumberUrl, data);
+  }
+
+
+

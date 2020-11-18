@@ -1,17 +1,24 @@
 import React, { Component } from "react";
 import "./Profile.css";
 import { Link } from "react-router-dom";
-import {workPost} from '../../services/work'
-import {workGet} from '../../services/work'
-import {deCodeId} from '../../services/userId'
-import SearchAppBar from "../Timline/SearchAppBar";
+import { workPost } from "../../services/work";
+import { workGet } from "../../services/work";
+import { deCodeId } from "../../services/userId";
 import SearchBar from "../Timline/SearchBar";
+import Alert from "react-bootstrap/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
+
+
+
 class Work extends Component {
   state = {
     display: "block",
     workStyle: "none",
     collegeDisplay: "block",
     collegeForm: "none",
+    alertShow:false,
+    loading: false,
 
     workData: {
       jobTitle: "",
@@ -26,10 +33,9 @@ class Work extends Component {
     },
   };
 
-  componentDidMount(){
-    this.fetchWorkData()
+  componentDidMount() {
+    this.fetchWorkData();
   }
-
 
   handelWorkChange = async (e) => {
     let { workData } = { ...this.state };
@@ -49,42 +55,57 @@ class Work extends Component {
     await this.setState({ uniData: currentState });
   };
 
-  fetchWorkData =async ()=>{
-    let userId =await deCodeId();
-    let id={userId}
-    let data=await workGet(id)
-    let {jobTitle, jobCity, jobDesc, startDate, endDate,collegeName, degreeDesc} = data.data
-   let uniData ={
-     uniName:collegeName,
-     startDate:startDate,
-     endDate:endDate,
-     degreeDesc:degreeDesc
-
-   }
-   let jobData ={
-    jobTitle,
-    jobCity,
-    jobDesc
-   }
-    await this.setState({uniData:uniData, workData:jobData})
-   console.log(this.state.uniData, this.state.workData)
-  }
-
+  fetchWorkData = async () => {
+    let userId = await deCodeId();
+    let id = { userId };
+    let data = await workGet(id);
+    let {
+      jobTitle,
+      jobCity,
+      jobDesc,
+      startDate,
+      endDate,
+      collegeName,
+      degreeDesc,
+    } = data.data;
+    let uniData = {
+      uniName: collegeName,
+      startDate: startDate,
+      endDate: endDate,
+      degreeDesc: degreeDesc,
+    };
+    let jobData = {
+      jobTitle,
+      jobCity,
+      jobDesc,
+    };
+    await this.setState({ uniData: uniData, workData: jobData });
+    
+  };
 
   handelWorkPlace = () => {
     this.setState({ display: "none", workStyle: "block" });
   };
-  handelWorkSave =async () => {
-    this.postWorkData()
-    this.setState({ display: "block", workStyle: "none" });
-    
+  handelWorkSave = async () => {
+    let { jobTitle, jobCity, jobDesc } = this.state.workData;
+    if(jobTitle.length<1 || jobCity.length <1 || jobDesc.length <1){
+      this.setState({alertShow:true})
+    }
+    else{
+      this.setState({alertShow:false, loading :true})
+
+      this.postWorkData();
+
+      this.setState({loading:false})
+      this.setState({ display: "block", workStyle: "none" });
+    }
   };
 
-  postWorkData = async() =>{
+  postWorkData = async () => {
     let { uniName, startDate, endDate, degreeDesc } = this.state.uniData;
     let { jobTitle, jobCity, jobDesc } = this.state.workData;
-    let userId =await deCodeId();
-    let data ={
+    let userId = await deCodeId();
+    let data = {
       userId,
       jobTitle,
       jobCity,
@@ -92,16 +113,29 @@ class Work extends Component {
       uniName,
       startDate,
       endDate,
-      degreeDesc
-    }
-    let result =await workPost(data);
-  }
+      degreeDesc,
+    };
+
+   
+      let result = await workPost(data);
+     
+
+
+  };
   handelCollege = () => {
     this.setState({ collegeDisplay: "none", collegeForm: "block" });
   };
   handelCollegeSave = () => {
-    this.postWorkData()
-    this.setState({ collegeDisplay: "block", collegeForm: "none" });
+    let { uniName, startDate, endDate, degreeDesc } = this.state.uniData;
+    if(uniName.length<1 || startDate.length <1 || endDate.length <1|| degreeDesc.length <1){
+      this.setState({alertShow:true})
+    }
+    else{
+      this.setState({alertShow:false, loading :true})
+      this.postWorkData();
+
+      this.setState({ collegeDisplay: "block", collegeForm: "none" });
+    }
   };
 
   render() {
@@ -126,7 +160,7 @@ class Work extends Component {
       <React.Fragment>
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
           {/* <SearchAppBar/> */}
-          <SearchBar/>
+          <SearchBar />
           <div
             className="container"
             style={{
@@ -173,12 +207,11 @@ class Work extends Component {
                   <Link to="/covid" style={{ marginTop: "5px" }}>
                     Covid Question
                   </Link>
-                  <Link
-                    to="/setting"
-                    style={{ marginTop: "5px" }}
-                    
-                  >
+                  <Link to="/setting" style={{ marginTop: "5px" }}>
                     Setting
+                  </Link>
+                  <Link to="/payment" style={{ marginTop: "5px" }}>
+                    Payment
                   </Link>
                 </div>
               </div>
@@ -188,20 +221,20 @@ class Work extends Component {
                 style={{ padding: "25px", color: "white" }}
               >
                 {/* Work Section */}
-
+                <Alert show={this.state.alertShow} variant="danger">
+                  <p>Fill All Fields</p>
+                </Alert>
+                <div style={this.state.loading ? loadingStyle : unLoadingStyle}>
+                  <CircularProgress color="inherit" />
+                </div>
                 <h3>Work</h3>
                 <div style={style}>
                   <span onClick={this.handelWorkPlace}>Add Work Place</span>
-          <h5 className="mt-2">{jobTitle}</h5>
+                  <h5 className="mt-2">{jobTitle}</h5>
                   <div style={{ display: "flex" }}>
-                   
-                    <p className="">
-                    at  {jobCity}
-                    </p>
+                    <p className="">at {jobCity}</p>
                   </div>
-                  <p style={{ marginTop: "-10px" }}>
-                   {jobDesc}
-                  </p>
+                  <p style={{ marginTop: "-10px" }}>{jobDesc}</p>
                 </div>
                 <div className="profileForm" style={workStyles}>
                   <input
@@ -245,13 +278,13 @@ class Work extends Component {
                 <h3>Universty</h3>
                 <div style={collegeShow}>
                   <span onClick={this.handelCollege}>Add College</span>
-                  <h5 className="mt-2">
-                    Studied at {uniName}
-                  </h5>
+                  <h5 className="mt-2">Studied at {uniName}</h5>
                   <div style={{ display: "flex" }}>
-          <p>{startDate} to {endDate}</p>
+                    <p>
+                      {startDate} to {endDate}
+                    </p>
                   </div>
-          <p style={{ marginTop: "-10px" }}>{degreeDesc}</p>
+                  <p style={{ marginTop: "-10px" }}>{degreeDesc}</p>
                 </div>
                 <div style={collegeFormShow} className="profileForm">
                   <input
@@ -306,3 +339,30 @@ class Work extends Component {
 }
 
 export default Work;
+
+
+const loadingStyle = {
+  zIndex: 50,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  background: "rgba(0, 0, 0, 0.8)",
+  width: "100vw",
+  height: "100vh",
+  position: "absolute",
+  top: "0",
+  left: "0",
+};
+
+const unLoadingStyle = {
+  zIndex: -50,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  background: "rgba(0, 0, 0, 0.8)",
+  width: "100vw",
+  height: "100vh",
+  position: "absolute",
+  top: "0",
+  left: "0",
+};

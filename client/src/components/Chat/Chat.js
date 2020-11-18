@@ -175,7 +175,7 @@ await this.setState({userAvatar:image.imageUrl})
     const {
       history: { push },
     } = this.props;
-
+    
     push("/home");
   };
   handelLogout = () => {

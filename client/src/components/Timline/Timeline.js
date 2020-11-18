@@ -8,26 +8,26 @@ import moment from "moment";
 import Inputcard from "./Inputcard";
 import Eventcard from "./Eventcard";
 import Avatar from "@material-ui/core/Avatar";
-import modelImage from "../../images/mod2.png";
+
 import { getFriendWithChat } from "../../services/chat";
 
 import "./Timeline.css";
-import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
+
 import SearchAppBar from "./SearchAppBar";
 import { friendGet } from "../../services/friendGet";
 import { deCodeId } from "../../services/userId";
-import { chatGet } from "../../services/chat";
+
 import { postGet } from "../../services/post";
 import { findRequest } from "../../services/friendGet";
 import { useDispatch } from "react-redux";
 import { getFullUserDetail } from "../../services/profile";
 import { userId } from "../../action/userIdAction";
 import { messageFriendList } from "../../action/userIdAction";
-import { showMessage } from "../../action/userIdAction";
-import { useSelector } from "react-redux";
 
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { useSelector } from "react-redux";
+import Alert from 'react-bootstrap/Alert'
+import Button from 'react-bootstrap/Button'
+
 import Chatbox from "./Chatbox";
 import MessageList from "./MessageList";
 import { unreadMessages } from "../../action/userIdAction";
@@ -63,7 +63,8 @@ function Timeline() {
   const [showChatBox, setShowChatBox] = useState(false);
   const [friendName, setFriendName] = useState("");
   const [postData, setPostData] = useState([]);
-
+  const [showAlert, setShowAlert] = useState(false);
+  
   const dispatch = useDispatch();
   const showDispatch = useDispatch();
   const friendRequestDispatch = useDispatch();
@@ -90,13 +91,13 @@ function Timeline() {
     fetchPostData();
     setUser();
     fetchChataData();
-    if (currentUser.length > 0) {
-    }
+    
   }, []);
 
   useEffect(() => {
     getFriendRequest();
   }, [currentUser]);
+
 
   const handleMessenger = () => {
     history.push("/chat");
@@ -123,6 +124,7 @@ function Timeline() {
     };
     await setFriendData(friendData);
     myRef.current.fetchMessages();
+    myRef.current.getChatNumber();
   };
 
   let getFriendRequest = async () => {
@@ -144,11 +146,15 @@ function Timeline() {
     let id = await deCodeId();
     let userId = { userId: id };
     let { data } = await friendGet(userId);
-    console.log(data)
+    
     if (data) {
       setFriend(data);
     }
   };
+
+  let handelProfileComplete =()=>{
+    history.push("/basicInfo");
+  }
 
   let fetchPostData = async () => {
     let { data } = await postGet();
@@ -166,7 +172,14 @@ function Timeline() {
     };
     let { data } = await getFullUserDetail(id);
 
-    dispatch(userId(data));
+    if(data.length ===0){
+      setShowAlert(true)
+   
+    }
+
+    if (data.length > 0) {
+      dispatch(userId(data));
+    }
   };
 
   let fetchChataData = async () => {
@@ -203,6 +216,8 @@ function Timeline() {
     setFriendData(data);
     await setShowChatBox(true);
     myRef.current.fetchMessages();
+    myRef.current.getChatNumber();
+
   };
 
   let countUnread = () => {
@@ -217,13 +232,16 @@ function Timeline() {
       }
     }
 
-    unreadDispatch(unreadMessages(count));
-    console.log(count);
-    console.log(friendMessages);
+      unreadDispatch(unreadMessages(count));
+   
+
+
   };
 
   return (
     <div className={classes.root}>
+    
+
       <MessageList
         change={(data) => {
           friendId(data);
@@ -244,6 +262,10 @@ function Timeline() {
           ref={myRef}
         />
 
+
+
+        
+
         <Grid
           item
           xs={9}
@@ -259,6 +281,20 @@ function Timeline() {
             overflow: "auto",
           }}
         >
+
+
+<Alert show={showAlert} variant="success" style={{zIndex:"400000" , margin:"20%"}}>
+        <Alert.Heading>Complete your profile first...</Alert.Heading>
+        <p>
+        Click on button below to complete your profile.
+        </p>
+        <hr />
+        <div className="d-flex justify-content-end">
+          <Button variant="outline-success" onClick={handelProfileComplete}>
+            Click
+          </Button>
+        </div>
+      </Alert>
           <div style={{ overflow: "auto", marginBottom: "4rem" }}>
             <Inputcard />
             <br />

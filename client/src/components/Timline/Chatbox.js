@@ -9,7 +9,10 @@ import {chatPost} from '../../services/chat'
 import {chatGet} from '../../services/chat'
 import {readLastMessage} from '../../services/chat'
 import "./Timeline.css";
+import { chatNumberGet } from "../../services/chat";
+import { Link } from 'react-router-dom';
 
+import Button from 'react-bootstrap/Button'
 
 
 // const socketUrl ="http://67.207.95.173:5000";
@@ -30,13 +33,35 @@ class Chatbox extends Component {
     currentUser: "",
 
     socket: "null",
+    userMessage:false
   };
 
   async componentDidMount() {
     this.getCurrentUser();
 
     this.getMessage();
+ 
     
+  }
+
+
+  getChatNumber =async () =>{
+   
+    if(this.state.currentUser.length>0){
+      let userData={
+        userId:this.state.currentUser
+      }
+     let {data}= await chatNumberGet(userData)
+      if(data.length>5){
+       
+        this.setState({userMessage:true})
+      }
+      else{
+        this.setState({userMessage:false})
+
+      }
+    }
+
   }
 
   getMessage = () => {
@@ -90,7 +115,7 @@ class Chatbox extends Component {
   handelShow = async() => {
     await this.props.close();
     await this.fetchMessages();
-    console.log(this.state.messageList)
+   
   };
 
   scrollToBottom() {
@@ -105,10 +130,10 @@ class Chatbox extends Component {
       receiverId: this.state.friendId,
     };
     let { data } = await chatGet(getDataObject);
-    console.log(data)
+
     this.setState({ messageList: data });
     this.scrollToBottom()
-    console.log(this.state.messageList[this.state.messageList.length-1])
+   
   };
 
   handelMessage = async (e) => {
@@ -148,6 +173,10 @@ class Chatbox extends Component {
     }
   };
 
+  handelSubscription = () =>{
+    console.log(window.location)
+   window.location("#/payment")
+  }
   render() {
     let {
       chatShow,
@@ -157,6 +186,7 @@ class Chatbox extends Component {
       messageList,
       inputMessage,
       currentUser,
+      userMessage
     } = this.state;
     return (
       <div
@@ -171,7 +201,6 @@ class Chatbox extends Component {
             alignItems: "center",
           }}
         >
-     
           <Avatar
             alt="Remy Sharp"
             src={friendImage}
@@ -189,9 +218,22 @@ class Chatbox extends Component {
           </IconButton>
         </div>
         <div id="body">
-    
 
-          {messageList.map((item, index) => {
+{userMessage ? <div
+            style={{
+              display: "flex",
+              width: "100%",
+              height: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Link to="/payment">
+            <Button id="priceButton" >
+              Need Subscription
+            </Button>
+            </Link>
+          </div> :  messageList.map((item, index) => {
             return (
               <div
                 id={item.senderId == currentUser ? "user2" : "user1"}
@@ -200,7 +242,12 @@ class Chatbox extends Component {
                 {item.message}
               </div>
             );
-          })}
+          })
+          }
+
+          
+
+         
         </div>
         <div id="btm">
           <input
@@ -212,6 +259,7 @@ class Chatbox extends Component {
             value={inputMessage}
             onChange={this.handelMessage}
             onKeyDown={this.handelMessageClick}
+            disabled ={userMessage ? true : false}
           />
         </div>
       </div>
