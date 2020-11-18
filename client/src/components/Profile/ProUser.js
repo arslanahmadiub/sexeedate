@@ -6,25 +6,25 @@ import StripeCheckout from "react-stripe-checkout";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { apiEndPoint } from "../../config.json";
+import { useSelector } from "react-redux";
 
 import moment from "moment";
 
 import Dropdown from "react-bootstrap/Dropdown";
 import { packageGet } from "../../services/packages";
- 
-
+import { proUser } from "../../services/profile";
 
 const paymentPostUrl = apiEndPoint + "/payment";
 
 function ProUser() {
   const [product, setProduct] = useState({
-    name: "React from FB",
+    name: "Sexee Data Subscription",
     price: 10,
-    productBy: "facebook",
+    productBy: "SupremeSoftwareSolution",
   });
   const [packageData, setpackageData] = useState([]);
-
-
+  const [futureMonth, setFutureMonth] = useState("");
+  const currentUser = useSelector((state) => state.userId.users[0]._id);
 
   useEffect(() => {
     getPackages();
@@ -33,70 +33,61 @@ function ProUser() {
   const [subscription, setSubscription] = useState("Subscription");
 
   const makePayment = async (token) => {
-    let body = {
-      token,
-      product,
-    };
+    if (currentUser) {
+      let proData = {
+        userId: currentUser,
+        subStatus: "Pro",
+        subDate: futureMonth,
+      };
 
-    const headers = {
-      "Content-Type": "application/json",
-    };
+      await proUser(proData);
+      let body = {
+        token,
+        product,
+      };
 
-    return fetch(paymentPostUrl, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(body),
-    })
-      .then((response) => {
-        console.log("RESPONSE ", response);
-        const { status } = response;
-        console.log("STATUS ", status);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+
+      return fetch(paymentPostUrl, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(body),
       })
-      .catch((error) => console.log(error));
-
-    //  let result = await axios.post(paymentPostUrl, body);
-
-    //  const { status } = result.data;
-    //  if (status === "success") {
-    //    console.log("Payment Received");
-    //  } else {
-    //    console.log("Error");
-    //  }
+        .then((response) => {
+          const { status } = response;
+        })
+        .catch((error) => console.log(error));
+    } else {
+      console.log("User Not Found.");
+    }
   };
-
-  const handelSubscriptionChange = (e) => {
-    let m = moment();
-    console.log(e.target.value);
-    console.log(m.toString());
-  };
-
 
   let getPackages = async () => {
     let { data } = await packageGet();
-    if(data.length>0){
-      
+    if (data.length > 0) {
       await setpackageData(data);
     }
-  
   };
 
-  const handleSelect = (e) => {
-   
-     let result = packageData.filter((id) => id.packageDuration === e);
+  const handleSelect = async (e) => {
+    let m = moment().format("L");
+    var futureMonth = moment(m).add(e, "M").format("L");
+    await setFutureMonth(futureMonth.toString());
 
-     setSubscription(result[0].packageName);
-     setProduct({
-       name: "React from FB",
-       price: result[0].packagePrice,
-       productBy: "facebook",
-     });
-  
-    
+    let result = packageData.filter((id) => id.packageDuration === e);
+
+    setSubscription(result[0].packageName);
+    setProduct({
+      name: "React from FB",
+      price: result[0].packagePrice,
+      productBy: "facebook",
+    });
   };
   return (
     <React.Fragment>
       <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
-        {/* <SearchAppBar/> */}
         <SearchBar />
         <div
           className="container"
@@ -165,10 +156,14 @@ function ProUser() {
                 <Dropdown.Menu>
                   {packageData.length > 0
                     ? packageData.map((item, index) => {
-                      return(
-                        <Dropdown.Item eventKey={item.packageDuration} key={index}>
-                          {item.packageName}
-                        </Dropdown.Item>)
+                        return (
+                          <Dropdown.Item
+                            eventKey={item.packageDuration}
+                            key={index}
+                          >
+                            {item.packageName}
+                          </Dropdown.Item>
+                        );
                       })
                     : null}
                 </Dropdown.Menu>
@@ -185,7 +180,7 @@ function ProUser() {
                 <Button
                   id="priceButton"
                   className={
-                    subscription === "Subscription"  ? "checkOutButton" : ""
+                    subscription === "Subscription" ? "checkOutButton" : ""
                   }
                 >
                   Subscription for{" "}

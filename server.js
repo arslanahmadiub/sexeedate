@@ -2,20 +2,19 @@ const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
 const cors = require("cors");
-const stripe = require("stripe")("sk_test_51HnRucEeHt0CNn6ZQSurKasE1mKXRTpusE1YFWsBrpYfjaCuh48aJUwLdCw5RTQu9JKOYNu2UDsLEjMCtTVulzNj00jL52moSY");
-const { v4: uuidv4, v4 } = require('uuid');
-
+const stripe = require("stripe")(
+  "sk_test_51HnRucEeHt0CNn6ZQSurKasE1mKXRTpusE1YFWsBrpYfjaCuh48aJUwLdCw5RTQu9JKOYNu2UDsLEjMCtTVulzNj00jL52moSY"
+);
+const { v4: uuidv4, v4 } = require("uuid");
 
 const connectDB = require("./config/db");
 
-
 const port = process.env.PORT || 5000;
-
 
 const app = express();
 app.use(cors());
 const server = http.createServer(app);
-const io=module.exports.io = socketio(server);
+const io = (module.exports.io = socketio(server));
 
 // Connect Database
 
@@ -23,17 +22,14 @@ connectDB();
 
 app.use(express.json({ extended: false }));
 
-
 // app.get("/", (req, res) => res.send("Api Running"));
 
 //Routes for Prize
 
 io.on("connect", (socket) => {
-    socket.on("newMessage", ({senderId, receiverId,message})=>{
-      
-      io.emit('res', {senderId, receiverId,message})
-    })
-
+  socket.on("newMessage", ({ senderId, receiverId, message }) => {
+    io.emit("res", { senderId, receiverId, message });
+  });
 });
 // io.on("connect", SocketManager);
 
@@ -53,10 +49,7 @@ app.post("/payment", (req, res) => {
     .catch((err) => console.log(err));
 });
 
-
-
-
-app.use("/images", express.static("upload/images"))
+app.use("/images", express.static("upload/images"));
 app.use("/profile", require("./routes/profilePost"));
 app.use("/profileGet", require("./routes/profileGet"));
 app.use("/auth", require("./routes/auth"));
@@ -105,12 +98,8 @@ app.use("/chatMessageNumberGet", require("./routes/chatNumerGet"));
 app.use("/packagePost", require("./routes/packagesPost"));
 app.use("/packageGet", require("./routes/packageGet"));
 app.use("/packageDelete", require("./routes/deletePackage"));
-
+app.use("/proUser", require("./routes/proUser"));
 
 app.get("/confirm", require("./routes/confirmEmail"));
 
 server.listen(port, () => console.log(`Server has started at port ${port}`));
-
-
-
-

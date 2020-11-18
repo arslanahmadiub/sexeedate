@@ -25,8 +25,8 @@ import { userId } from "../../action/userIdAction";
 import { messageFriendList } from "../../action/userIdAction";
 
 import { useSelector } from "react-redux";
-import Alert from 'react-bootstrap/Alert'
-import Button from 'react-bootstrap/Button'
+import Alert from "react-bootstrap/Alert";
+import Button from "react-bootstrap/Button";
 
 import Chatbox from "./Chatbox";
 import MessageList from "./MessageList";
@@ -64,7 +64,9 @@ function Timeline() {
   const [friendName, setFriendName] = useState("");
   const [postData, setPostData] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
-  
+  const [userProStatus, setUserProStatus] = useState("");
+  const [userProDate, setUserProDate] = useState("");
+
   const dispatch = useDispatch();
   const showDispatch = useDispatch();
   const friendRequestDispatch = useDispatch();
@@ -91,13 +93,11 @@ function Timeline() {
     fetchPostData();
     setUser();
     fetchChataData();
-    
   }, []);
 
   useEffect(() => {
     getFriendRequest();
   }, [currentUser]);
-
 
   const handleMessenger = () => {
     history.push("/chat");
@@ -125,6 +125,7 @@ function Timeline() {
     await setFriendData(friendData);
     myRef.current.fetchMessages();
     myRef.current.getChatNumber();
+    myRef.current.userSubscription();
   };
 
   let getFriendRequest = async () => {
@@ -146,15 +147,15 @@ function Timeline() {
     let id = await deCodeId();
     let userId = { userId: id };
     let { data } = await friendGet(userId);
-    
+
     if (data) {
       setFriend(data);
     }
   };
 
-  let handelProfileComplete =()=>{
+  let handelProfileComplete = () => {
     history.push("/basicInfo");
-  }
+  };
 
   let fetchPostData = async () => {
     let { data } = await postGet();
@@ -172,12 +173,13 @@ function Timeline() {
     };
     let { data } = await getFullUserDetail(id);
 
-    if(data.length ===0){
-      setShowAlert(true)
-   
+    if (data.length === 0) {
+      setShowAlert(true);
     }
 
     if (data.length > 0) {
+      setUserProStatus(data[0].subStatus);
+      setUserProDate(data[0].subOverDate);
       dispatch(userId(data));
     }
   };
@@ -217,7 +219,6 @@ function Timeline() {
     await setShowChatBox(true);
     myRef.current.fetchMessages();
     myRef.current.getChatNumber();
-
   };
 
   let countUnread = () => {
@@ -232,16 +233,11 @@ function Timeline() {
       }
     }
 
-      unreadDispatch(unreadMessages(count));
-   
-
-
+    unreadDispatch(unreadMessages(count));
   };
 
   return (
     <div className={classes.root}>
-    
-
       <MessageList
         change={(data) => {
           friendId(data);
@@ -259,12 +255,10 @@ function Timeline() {
           image={friendData.friendImage}
           id={friendData.friendId}
           update={() => countUnread()}
+          userStatus={userProStatus}
+          userEndDate={userProDate}
           ref={myRef}
         />
-
-
-
-        
 
         <Grid
           item
@@ -281,20 +275,20 @@ function Timeline() {
             overflow: "auto",
           }}
         >
-
-
-<Alert show={showAlert} variant="success" style={{zIndex:"400000" , margin:"20%"}}>
-        <Alert.Heading>Complete your profile first...</Alert.Heading>
-        <p>
-        Click on button below to complete your profile.
-        </p>
-        <hr />
-        <div className="d-flex justify-content-end">
-          <Button variant="outline-success" onClick={handelProfileComplete}>
-            Click
-          </Button>
-        </div>
-      </Alert>
+          <Alert
+            show={showAlert}
+            variant="success"
+            style={{ zIndex: "400000", margin: "20%" }}
+          >
+            <Alert.Heading>Complete your profile first...</Alert.Heading>
+            <p>Click on button below to complete your profile.</p>
+            <hr />
+            <div className="d-flex justify-content-end">
+              <Button variant="outline-success" onClick={handelProfileComplete}>
+                Click
+              </Button>
+            </div>
+          </Alert>
           <div style={{ overflow: "auto", marginBottom: "4rem" }}>
             <Inputcard />
             <br />

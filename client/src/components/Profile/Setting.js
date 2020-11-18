@@ -1,38 +1,47 @@
 import React, { Component } from "react";
-
 import "./Profile.css";
 import { Link } from "react-router-dom";
-
+import { updateUserPassword } from "../../services/profile";
 import SearchBar from "../Timline/SearchBar";
+import { deCodeId } from "../../services/userId";
 
 class Setting extends Component {
   state = {
     UpdatePassword: "",
-    update:false
+    update: false,
+    alertText: "",
   };
 
   onChangePassword = async (e) => {
     await this.setState({ UpdatePassword: e.target.value });
   };
 
-  handelPassword = () => {
-    
-    this.setState({update:true})
-    setTimeout(() => {
-    this.setState({update:false})
-        
-    }, 5000);
+  handelPassword = async () => {
+    let userId = await deCodeId();
+    let passData = {
+      userId: userId,
+      password: this.state.UpdatePassword,
+    };
+    if (this.state.UpdatePassword.length < 1) {
+      this.setState({ alertText: "Enter Password..." });
+      this.setState({ update: true });
+    } else {
+      this.setState({ alertText: "Your Password is successfully update.." });
+      await updateUserPassword(passData);
+      this.setState({ update: true, UpdatePassword: "" });
+      setTimeout(() => {
+        this.setState({ update: false });
+      }, 5000);
+    }
   };
 
-
-
   render() {
-      let {update} = this.state;
+    let { update } = this.state;
     return (
       <React.Fragment>
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
           {/* <SearchAppBar /> */}
-          <SearchBar/>
+          <SearchBar />
           <div
             className="container"
             style={{
@@ -84,8 +93,8 @@ class Setting extends Component {
                     Setting
                   </Link>
                   <Link to="/payment" style={{ marginTop: "5px" }}>
-                  Payment
-                </Link>
+                    Payment
+                  </Link>
                 </div>
               </div>
               <div
@@ -95,13 +104,18 @@ class Setting extends Component {
                 {/* update password */}
 
                 <div className="profileForm">
-                  <div className="alert alert-primary" role="alert" style={update ? {display:"flex"}:{display:"none"}}>
-                    Your Password is successfully update..
+                  <div
+                    className="alert alert-primary"
+                    role="alert"
+                    style={update ? { display: "flex" } : { display: "none" }}
+                  >
+                    {this.state.alertText}
                   </div>
                   <input
                     type="text"
                     className="form-control mt-3"
                     name="UpdatePassword"
+                    value={this.state.UpdatePassword}
                     placeholder="Update Password"
                     onChange={this.onChangePassword}
                   />

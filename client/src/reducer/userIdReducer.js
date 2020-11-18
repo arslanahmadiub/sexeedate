@@ -18,11 +18,13 @@ const initalState = {
       gender: "",
       role: "",
       _id: "",
+      subStatus: "",
+      subOverDate: "",
     },
   ],
   showMessage: false,
   messageFriendList: [],
-  unreadMessages:""
+  unreadMessages: "",
 };
 
 export const userIdReducer = (state = initalState, action) => {

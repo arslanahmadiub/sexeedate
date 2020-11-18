@@ -3,20 +3,20 @@ import io from "socket.io-client";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Avatar from "@material-ui/core/Avatar";
-import {deCodeId} from '../../services/userId'
+import { deCodeId } from "../../services/userId";
 import { animateScroll } from "react-scroll";
-import {chatPost} from '../../services/chat'
-import {chatGet} from '../../services/chat'
-import {readLastMessage} from '../../services/chat'
+import { chatPost } from "../../services/chat";
+import { chatGet } from "../../services/chat";
+import { readLastMessage } from "../../services/chat";
 import "./Timeline.css";
 import { chatNumberGet } from "../../services/chat";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import moment from "moment";
 
-import Button from 'react-bootstrap/Button'
-
+import Button from "react-bootstrap/Button";
 
 // const socketUrl ="http://67.207.95.173:5000";
-const socketUrl ="http://157.230.228.67:5000";
+const socketUrl = "http://157.230.228.67:5000";
 
 class Chatbox extends Component {
   state = {
@@ -25,6 +25,8 @@ class Chatbox extends Component {
     friendName: this.props.name,
     friendId: this.props.id,
     friendImage: this.props.image,
+    userStatus: this.props.userStatus,
+    userEndDate: this.props.userEndDate,
     name: "",
     room: "1",
     messageList: [],
@@ -33,55 +35,45 @@ class Chatbox extends Component {
     currentUser: "",
 
     socket: "null",
-    userMessage:false
+    userMessage: false,
   };
-
   async componentDidMount() {
     this.getCurrentUser();
 
     this.getMessage();
- 
-    
   }
 
-
-  getChatNumber =async () =>{
-   
-    if(this.state.currentUser.length>0){
-      let userData={
-        userId:this.state.currentUser
-      }
-     let {data}= await chatNumberGet(userData)
-      if(data.length>5){
-       
-        this.setState({userMessage:true})
-      }
-      else{
-        this.setState({userMessage:false})
-
+  getChatNumber = async () => {
+    if (this.state.currentUser.length > 0) {
+      let userData = {
+        userId: this.state.currentUser,
+      };
+      let { data } = await chatNumberGet(userData);
+      if (data.length > 5) {
+        this.setState({ userMessage: true });
+      } else {
+        this.setState({ userMessage: false });
       }
     }
-
-  }
+  };
 
   getMessage = () => {
     let socket = io(this.state.endPoint);
     socket.on("res", (data) => {
-  
-      if (data.senderId === this.state.friendId  && data.receiverId === this.state.currentUser) {
+      if (
+        data.senderId === this.state.friendId &&
+        data.receiverId === this.state.currentUser
+      ) {
         let message = [...this.state.messageList];
         message.push(data);
         this.setState({ messageList: message });
-      console.log(this.state.messageList[this.state.messageList.length-1])
-
+        console.log(this.state.messageList[this.state.messageList.length - 1]);
       }
-      if(!this.state.chatShow){
-          
-          this.props.update()
+      if (!this.state.chatShow) {
+        this.props.update();
       }
 
       this.scrollToBottom();
-
     });
   };
 
@@ -105,17 +97,27 @@ class Chatbox extends Component {
       friendName: nextProps.name,
       friendId: nextProps.id,
       friendImage: nextProps.image,
+      userStatus: nextProps.userStatus,
+      userEndDate: nextProps.userEndDate,
     });
   }
+
+  userSubscription = () => {
+    let m = moment().format("L");
+    let userTime = this.state.userEndDate;
+    var x = new Date(m);
+    var y = new Date(userTime);
+
+    return Math.floor((x - y) / (1000 * 60 * 60 * 24));
+  };
 
   getCurrentUser = async () => {
     let id = await deCodeId();
     await this.setState({ currentUser: id });
   };
-  handelShow = async() => {
+  handelShow = async () => {
     await this.props.close();
     await this.fetchMessages();
-   
   };
 
   scrollToBottom() {
@@ -132,14 +134,13 @@ class Chatbox extends Component {
     let { data } = await chatGet(getDataObject);
 
     this.setState({ messageList: data });
-    this.scrollToBottom()
-   
+    this.scrollToBottom();
   };
 
   handelMessage = async (e) => {
     await this.setState({ inputMessage: e.target.value });
   };
-  
+
   handelMessageClick = async (e) => {
     if (e.key === "Enter") {
       let messageObject = {
@@ -148,12 +149,12 @@ class Chatbox extends Component {
         message: this.state.inputMessage,
       };
 
-      let readObject={
+      let readObject = {
         senderId: this.state.friendId,
         receiverId: this.state.currentUser,
-      }
-      
-      readLastMessage(readObject)
+      };
+
+      readLastMessage(readObject);
 
       let messageLists = [...this.state.messageList];
       messageLists.push(messageObject);
@@ -167,16 +168,15 @@ class Chatbox extends Component {
       this.scrollToBottom();
       this.newMessage(messageObject);
       const { data } = await chatPost(messageObject);
-      this.props.update()
-
-      
+      this.props.update();
     }
   };
 
-  handelSubscription = () =>{
-    console.log(window.location)
-   window.location("#/payment")
-  }
+  handelSubscription = () => {
+    console.log(window.location);
+    window.location("#/payment");
+  };
+
   render() {
     let {
       chatShow,
@@ -186,8 +186,11 @@ class Chatbox extends Component {
       messageList,
       inputMessage,
       currentUser,
-      userMessage
+      userMessage,
+      userStatus,
+      userEndDate,
     } = this.state;
+
     return (
       <div
         className={chatShow ? "con" : "closs"}
@@ -218,36 +221,33 @@ class Chatbox extends Component {
           </IconButton>
         </div>
         <div id="body">
-
-{userMessage ? <div
-            style={{
-              display: "flex",
-              width: "100%",
-              height: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Link to="/payment">
-            <Button id="priceButton" >
-              Need Subscription
-            </Button>
-            </Link>
-          </div> :  messageList.map((item, index) => {
-            return (
-              <div
-                id={item.senderId == currentUser ? "user2" : "user1"}
-                key={index}
-              >
-                {item.message}
-              </div>
-            );
-          })
-          }
-
-          
-
-         
+          {(userMessage && userStatus === "Free") ||
+          this.userSubscription() > 0 ? (
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                height: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Link to="/payment">
+                <Button id="priceButton">Need Subscription</Button>
+              </Link>
+            </div>
+          ) : (
+            messageList.map((item, index) => {
+              return (
+                <div
+                  id={item.senderId == currentUser ? "user2" : "user1"}
+                  key={index}
+                >
+                  {item.message}
+                </div>
+              );
+            })
+          )}
         </div>
         <div id="btm">
           <input
@@ -259,7 +259,7 @@ class Chatbox extends Component {
             value={inputMessage}
             onChange={this.handelMessage}
             onKeyDown={this.handelMessageClick}
-            disabled ={userMessage ? true : false}
+            disabled={userMessage ? true : false}
           />
         </div>
       </div>

@@ -20,60 +20,52 @@ router.post(
       });
       res.send(result);
       // video Delete section
-      if(result.length>0){
-
+      if (result.length > 0) {
         let video = result[0].video;
         let videoUrl = video.image_url.slice(33);
         //  deleteFile(videoUrl)
-  
+
         // imageDeletSection
-  
+
         let images = result[0].userImages;
-  
+
         for (let i = 0; i < 3; i++) {
           deleteFile(images[i].imageUrl.slice(33));
         }
-  
+
         // pasport deleteSection
-  
+
         let pasport = result[0].pasport;
         deleteFile(pasport.image_url.slice(33));
-  
-  
-        // delete basicInfo
-  
-        await BasicInfo.deleteMany({ userId: profileId })
 
+        // delete basicInfo
+
+        await BasicInfo.deleteMany({ userId: profileId });
       }
-      
-      
+
       // delete profile info
-      
-      await Profile.deleteMany({ _id: profileId })
+
+      await Profile.deleteMany({ _id: profileId });
 
       // delete post info
-      
-      await Post.deleteMany({ userId: profileId })
+
+      await Post.deleteMany({ userId: profileId });
 
       // delete Contact info
-      
-      await Contact.deleteMany({ userId: profileId })
+
+      await Contact.deleteMany({ userId: profileId });
 
       // delete covid info
-      
-      await Covid.deleteMany({ userId: profileId })
+
+      await Covid.deleteMany({ userId: profileId });
 
       // delete work info
-      
-      await Work.deleteMany({ userId: profileId })
 
+      await Work.deleteMany({ userId: profileId });
 
       // delete Hobby info
-      
-      await Hobby.deleteMany({ userId: profileId })
 
-
-
+      await Hobby.deleteMany({ userId: profileId });
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error...");

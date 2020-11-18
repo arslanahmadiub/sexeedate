@@ -24,6 +24,8 @@ router.post("/", async (req, res) => {
           dob: 1,
           gender: 1,
           email: 1,
+          subOverDate: 1,
+          subStatus: 1,
         },
       },
       {
@@ -37,7 +39,7 @@ router.post("/", async (req, res) => {
             {
               $project: {
                 _id: 0,
-                userImages:  { $arrayElemAt: [ "$userImages", 0 ] },
+                userImages: { $arrayElemAt: ["$userImages", 0] },
                 video: 1,
                 bio: 1,
               },
@@ -48,7 +50,6 @@ router.post("/", async (req, res) => {
         },
       },
       { $unwind: "$Detail" },
-
     ]);
     res.send(result);
   } catch (err) {

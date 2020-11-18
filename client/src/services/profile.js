@@ -13,6 +13,7 @@ const fullUserDetailUrl = apiEndPoint + "/getFullUserDetail";
 const userImageGetUrl = apiEndPoint + "/getUserImage";
 const updatePasswordUrl = apiEndPoint + "/updatePass";
 const forgetPassUrl = apiEndPoint + "/forgetPass";
+const proUserUrl = apiEndPoint + "/proUser";
 
 export async function profileGetFunction() {
   return await axios.get(profileGetUrl);
@@ -50,8 +51,9 @@ export async function sendEmailForUpdate(data) {
   return await axios.post(forgetPassUrl, data);
 }
 
-
-
+export async function proUser(data) {
+  return await axios.post(proUserUrl, data);
+}
 
 export async function currentUser() {
   let id = await deCodeId();
@@ -59,9 +61,6 @@ export async function currentUser() {
     userId: id,
   };
   let { data } = await axios.post(fullUserDetailUrl, userId);
- 
 
   return data;
 }
-
-

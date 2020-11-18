@@ -8,16 +8,16 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { getFriendWithChat } from "../../services/chat";
 import { deCodeId } from "../../services/userId";
 import { animateScroll } from "react-scroll";
-import {chatPost} from '../../services/chat'
+import { chatPost } from "../../services/chat";
 import { userImageGet } from "../../services/friendGet";
 
 import IconButton from "@material-ui/core/IconButton";
 import "./chat.css";
 
-const socketUrl ="http://157.230.228.67:5000";
+const socketUrl = "http://157.230.228.67:5000";
 
 class Chat extends Component {
-  state = { 
+  state = {
     curTime: new Date().toLocaleString(),
     endPoint: "http://157.230.228.67:5000",
     chatMember: [],
@@ -27,12 +27,12 @@ class Chat extends Component {
     chatData: [],
     friendImage: "",
     friendName: "",
-    receiverId:"",
+    receiverId: "",
     socket: "null",
-    userAvatar:""
+    userAvatar: "",
   };
 
- async componentDidMount() {
+  async componentDidMount() {
     await this.getCurrentUser();
 
     await this.fetchChataData();
@@ -40,24 +40,24 @@ class Chat extends Component {
     await this.getMessage();
   }
 
-fetchCurrentImage = async () => {
+  fetchCurrentImage = async () => {
     let id = await deCodeId();
     let userId = { userId: id };
     let { data } = await userImageGet(userId);
 
     if (data.length > 0) {
       let image = data[0].User.userImages[0];
-await this.setState({userAvatar:image.imageUrl})
-     
+      await this.setState({ userAvatar: image.imageUrl });
     }
   };
   getMessage = () => {
     let socket = io(this.state.endPoint);
-    
+
     socket.on("res", (data) => {
-      if (data.senderId === this.state.receiverId  && data.receiverId === this.state.currentUser) {
-      
-        
+      if (
+        data.senderId === this.state.receiverId &&
+        data.receiverId === this.state.currentUser
+      ) {
         let message = [...this.state.chat];
         message.push(data);
         this.setState({ chat: message });
@@ -66,7 +66,6 @@ await this.setState({userAvatar:image.imageUrl})
       this.scrollToBottom();
     });
   };
-
 
   initSocket = () => {
     const socket = io(socketUrl);
@@ -87,7 +86,6 @@ await this.setState({userAvatar:image.imageUrl})
     await this.setState({ currentUser: id });
   };
 
-  
   fetchChataData = async () => {
     let id = await deCodeId();
     let userId = { userId: id };
@@ -97,59 +95,54 @@ await this.setState({userAvatar:image.imageUrl})
     let friendArray = [];
 
     let chatArray = [];
-   
-      for (let i = 0; i < data.length; i++) {
-        if(data[i].Chat.length>0){
-          let friend = {
-            name: data[i].fullName,
-            avatar: data[i].Image.userImages.imageUrl,
-            lastMessage: data[i].Chat[data[i].Chat.length - 1].message,
-            id: data[i]._id,
-          };
-          friendArray.push(friend);
-    
-          let chatObject = {
-            id: data[i]._id,
-            chat: data[i].Chat,
-            avatar: data[i].Image.userImages.imageUrl,
-            name: data[i].fullName,
-          };
-          chatArray.push(chatObject);
-        }
-        else{
-          let friend = {
-            name: data[i].fullName,
-            avatar: data[i].Image.userImages.imageUrl,
-            lastMessage: "",
-            id: data[i]._id,
-          };
-          friendArray.push(friend);
-        }
-     
+
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].Chat.length > 0) {
+        let friend = {
+          name: data[i].fullName,
+          avatar: data[i].Image.userImages.imageUrl,
+          lastMessage: data[i].Chat[data[i].Chat.length - 1].message,
+          id: data[i]._id,
+        };
+        friendArray.push(friend);
+
+        let chatObject = {
+          id: data[i]._id,
+          chat: data[i].Chat,
+          avatar: data[i].Image.userImages.imageUrl,
+          name: data[i].fullName,
+        };
+        chatArray.push(chatObject);
+      } else {
+        let friend = {
+          name: data[i].fullName,
+          avatar: data[i].Image.userImages.imageUrl,
+          lastMessage: "",
+          id: data[i]._id,
+        };
+        friendArray.push(friend);
       }
-      this.setState({ chatMember: friendArray, chatData: chatArray });
-    
-    
+    }
+    this.setState({ chatMember: friendArray, chatData: chatArray });
   };
 
   onEnterKeyPress = async (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      console.log(this.state.chat)
+      console.log(this.state.chat);
       let message = this.state.chatText;
       let chatObject = {
         senderId: this.state.currentUser,
         receiverId: this.state.receiverId,
         message: message,
-      
       };
-      this.newMessage(chatObject)
+      this.newMessage(chatObject);
       let chat = [...this.state.chat];
       await chat.push(chatObject);
       await this.setState({ chat: chat });
-      await chatPost(chatObject)
+      await chatPost(chatObject);
       await this.setState({ chatText: "" });
-      this.scrollToBottom()
+      this.scrollToBottom();
     }
   };
 
@@ -175,7 +168,7 @@ await this.setState({userAvatar:image.imageUrl})
     const {
       history: { push },
     } = this.props;
-    
+
     push("/home");
   };
   handelLogout = () => {
@@ -188,29 +181,27 @@ await this.setState({userAvatar:image.imageUrl})
 
   handelChatClick = async (e) => {
     this.fetchChataData();
-    
+
     let { chatData } = this.state;
     let id = e.id;
-   
-    await this.setState({receiverId:id})
+
+    await this.setState({ receiverId: id });
     let filterObject = chatData.filter((item) => item.id == id);
-    if(filterObject.length>0){
+    if (filterObject.length > 0) {
       await this.setState({
         chat: filterObject[0].chat,
         friendImage: filterObject[0].avatar,
         friendName: filterObject[0].name,
       });
-    }
-    else{
-    let newFilter = this.state.chatMember.filter((item) => item.id == id);
-     
+    } else {
+      let newFilter = this.state.chatMember.filter((item) => item.id == id);
+
       await this.setState({
-        
         friendImage: newFilter[0].avatar,
         friendName: newFilter[0].name,
       });
     }
-  
+
     await this.scrollToBottom();
   };
 
@@ -228,7 +219,7 @@ await this.setState({userAvatar:image.imageUrl})
       friendImage,
       friendName,
       userAvatar,
-      receiverId
+      receiverId,
     } = this.state;
 
     return (
@@ -448,7 +439,7 @@ await this.setState({userAvatar:image.imageUrl})
                           <textarea
                             className="form-control"
                             placeholder="Start typing for reply..."
-                            disabled={receiverId.length>0 ? false :true}
+                            disabled={receiverId.length > 0 ? false : true}
                             value={this.state.chatText}
                             onChange={this.handleChat}
                             onKeyDown={this.onEnterKeyPress}
