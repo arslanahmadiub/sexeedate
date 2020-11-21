@@ -116,14 +116,30 @@ class Setting extends Component {
                     className="form-control mt-3"
                     name="UpdatePassword"
                     value={this.state.UpdatePassword}
-                    placeholder="Update Password"
+                    placeholder="Current Password"
                     onChange={this.onChangePassword}
                   />
+                  <input
+                    type="text"
+                    className="form-control mt-3"
+                    name="UpdatePassword"
+                    value={this.state.UpdatePassword}
+                    placeholder="New Password"
+                    onChange={this.onChangePassword}
+                  />
+                  <input
+                    type="text"
+                    className="form-control mt-3"
+                    name="UpdatePassword"
+                    value={this.state.UpdatePassword}
+                    placeholder="Confirm New Password"
+                    onChange={this.onChangePassword}
+                  />
+
                   <button
-                    type="button"
-                    className="btn btn-success mt-3"
-                    style={{ float: "right" }}
+                    className="btn-hover1 color-10"
                     onClick={this.handelPassword}
+                    style={{ float: "right" }}
                   >
                     Save
                   </button>

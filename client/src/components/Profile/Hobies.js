@@ -17,7 +17,6 @@ function Hobies() {
   let [hobbies, setHobbies] = useState([]);
   let [alertShow, setAlertShow] = useState(false);
   let [loading, setLoading] = useState(false);
-    
 
   const loadingStyle = {
     zIndex: 50,
@@ -31,7 +30,7 @@ function Hobies() {
     top: "0",
     left: "0",
   };
-  
+
   const unLoadingStyle = {
     zIndex: -50,
     display: "flex",
@@ -53,22 +52,16 @@ function Hobies() {
     setCovidForm("block");
   };
   let handelCovidForm = () => {
-    if(hobbies.length <1){
-      setAlertShow(true)
-    }
-    else{
-      setAlertShow(false)
-      setLoading(true)
+    if (hobbies.length < 1) {
+      setAlertShow(true);
+    } else {
+      setAlertShow(false);
+      setLoading(true);
       postHobby();
-      setLoading(false)
+      setLoading(false);
       setCovid("block");
       setCovidForm("none");
-
     }
-
-
-
-    
   };
 
   let getHobby = async () => {
@@ -182,14 +175,14 @@ function Hobies() {
             >
               {/* Work Section */}
               <Alert show={alertShow} variant="danger">
-                  <p>Fill All Fields</p>
-                </Alert>
-                <div style={loading ? loadingStyle : unLoadingStyle}>
-                  <CircularProgress color="inherit" />
-                </div>
+                <p>Fill All Fields</p>
+              </Alert>
+              <div style={loading ? loadingStyle : unLoadingStyle}>
+                <CircularProgress color="inherit" />
+              </div>
               <h3 style={{ textAlign: "center" }}>Add Your Hobies</h3>
               <div style={covidStyle}>
-                <span style={{ fontSize: "12px" }} onClick={handelCovid}>
+                <span style={{ fontSize: "16px" }} onClick={handelCovid}>
                   Add Hobies
                 </span>
                 <div className="mt-3" id="hobies">
@@ -234,12 +227,11 @@ function Hobies() {
                 />
 
                 <button
-                  type="button"
-                  className="btn btn-success mt-3"
-                  style={{ float: "right" }}
+                  className="btn-hover1 color-10"
                   onClick={handelCovidForm}
+                  style={{ float: "right" }}
                 >
-                  Submit
+                  Save
                 </button>
               </div>
 

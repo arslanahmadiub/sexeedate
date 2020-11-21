@@ -15,12 +15,11 @@ let { AgeFromDateString, AgeFromDate } = require("age-calculator");
 class Deck extends Component {
   state = {
     userId: "",
-    data:[],
-    gender:""
+    data: [],
+    gender: "",
   };
 
- async componentDidMount() {
-  
+  async componentDidMount() {
     await this.getCurrentUser();
     await this.fetchMatchingData();
     this.Swiper = new Swiper(".swiper-container", {
@@ -44,38 +43,33 @@ class Deck extends Component {
     console.log(e);
   };
 
-
   getCurrentUser = async () => {
     let result = await deCodeId();
-    let userId ={userId:result}
-    let {data}=await getUserGender(userId)
-    
-  await  this.setState({ userId: result , gender:data});
- 
+    let userId = { userId: result };
+    let { data } = await getUserGender(userId);
+
+    await this.setState({ userId: result, gender: data });
   };
 
   fetchMatchingData = async () => {
     let id = {
       userId: this.state.userId,
-      gender:this.state.gender
+      gender: this.state.gender,
     };
     let { data } = await matchGet(id);
-  
-   await this.setState({data})
-   
-   
+
+    await this.setState({ data });
   };
 
-  removeObject =(id)=>{
+  removeObject = (id) => {
     let newData = [...this.state.data];
-    let result=newData.filter(item=>item._id !== id)
-    this.setState({data:result})
-  
-  }
+    let result = newData.filter((item) => item._id !== id);
+    this.setState({ data: result });
+  };
 
   getAge = (data) => {
     let ageFromString = new AgeFromDateString(data).age;
-  return ageFromString
+    return ageFromString;
   };
   render() {
     return (
@@ -85,21 +79,40 @@ class Deck extends Component {
           style={{ width: "100vw", height: "100vh", overflow: "auto" }}
         >
           {/* <SearchAppBar /> */}
-          <SearchBar/>
+          <SearchBar />
           <div className="swiper-container" style={{ marginTop: "12vh" }}>
             <div className="swiper-wrapper">
-
-
-            {this.state.data.length>0 ?this.state.data.map((item, index) => {
-                return (
-                  <div className="swiper-slide " key={index}>
-                    <Card id={item._id} images={item.Detail.userImages} name={item.fullName} age={this.getAge(item.dob)} video={item.Detail.video.image_url} bio ={item.Detail.bio}  change={(data)=>this.removeObject(data)}/>
-                  </div>
-                );
-              }): 
-                <div style={{display:"flex", width:"100vw", height:"70vh", justifyContent:"center", alignItems:"center"}}><h1>No Matching Found...</h1></div>
-              }
-
+              {this.state.data.length > 0 ? (
+                this.state.data.map((item, index) => {
+                  return (
+                    <div className="swiper-slide " key={index}>
+                      <Card
+                        id={item._id}
+                        images={item.Detail.userImages}
+                        name={item.fullName}
+                        age={this.getAge(item.dob)}
+                        video={item.Detail.video.image_url}
+                        bio={item.Detail.bio}
+                        change={(data) => this.removeObject(data)}
+                      />
+                    </div>
+                  );
+                })
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100vw",
+                    height: "70vh",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                  }}
+                >
+                  <h1>No Matchings Found for now..</h1>
+                  <h1>Please Come later..</h1>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 
 import Button from "@material-ui/core/Button";
-import moment from 'moment';
+import moment from "moment";
 
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
@@ -20,7 +20,7 @@ import { userImageGet } from "../../services/friendGet";
 
 import { deCodeId } from "../../services/userId";
 import { postPost } from "../../services/post";
-import {useSelector} from 'react-redux'
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,21 +69,15 @@ export default function Inputcard() {
   let [userImage, setUserImage] = useState("");
   let [currentUser, setCurrentUser] = useState("");
   let [eventMessage, setEventMessage] = useState("");
-  const users = useSelector((state) => state.userId.users[0].Detail.userImages.imageUrl);
+  const users = useSelector(
+    (state) => state.userId.users[0].Detail.userImages.imageUrl
+  );
 
-
-  
-
-   
-    
-  useEffect(()=>{
-    if(users && userImage.length<1){
-      setUserImage(users)
-    
-      
-     }
-   },[users])
-   
+  useEffect(() => {
+    if (users && userImage.length < 1) {
+      setUserImage(users);
+    }
+  }, [users]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -94,10 +88,9 @@ export default function Inputcard() {
 
   useEffect(() => {
     fetchCurrentUser();
-   
-    getTime()
-    
-  },[]);
+
+    getTime();
+  }, []);
 
   // let fetchCurrentImage = async () => {
   //   let id = await deCodeId();
@@ -120,30 +113,26 @@ export default function Inputcard() {
     await setEventMessage(e.target.value);
   };
 
-  let handelPostEvent =async ()=>{
-    let post ={
-      userId:currentUser,
-      message:eventMessage,
-      dateTime: moment().toString()
-    }
-    if(eventMessage.length >1){
-      let {data} =await postPost(post);
+  let handelPostEvent = async () => {
+    let post = {
+      userId: currentUser,
+      message: eventMessage,
+      dateTime: moment().toString(),
+    };
+    if (eventMessage.length > 1) {
+      let { data } = await postPost(post);
       setOpen(false);
-      console.log(data)
+      console.log(data);
     }
-  
-  }
+  };
 
-  let getTime = () =>{
+  let getTime = () => {
     // const m = moment();
     // let currentTime = m.toString();
-    
     // const m2 = moment("Thu Oct 22 2020 13:57:54 GMT+0500");
     // console.log(m2.fromNow())
     // console.log(moment().toString())
-
-
-  }
+  };
 
   return (
     <React.Fragment>
@@ -169,7 +158,7 @@ export default function Inputcard() {
               height: "40px",
               borderRadius: "100px",
               boxShadow: "none",
-              color: "#F0F2F5",
+              color: "#B71C1C",
               outline: "none",
             }}
           >
@@ -212,23 +201,19 @@ export default function Inputcard() {
             onChange={getTextFieldData}
           />
 
-          <Button
-            variant="contained"
+          <button
+            className="btn-hover1 color-10"
             onClick={handelPostEvent}
             style={{
-              background: "#BA1D1D",
               width: "100%",
               height: "3rem",
               alignItems: "center",
-              borderRadius: "100px",
-              boxShadow: "none",
-              color: "#F0F2F5",
+              marginLeft: "0px",
               marginTop: "10px",
-              outline: "none",
             }}
           >
             Post
-          </Button>
+          </button>
         </MuiDialogContent>
       </Dialog>
     </React.Fragment>

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Modal, Alert } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Button } from "@material-ui/core";
 import { saveUser } from "../services/signup";
 
@@ -44,12 +44,15 @@ function Register() {
     });
   };
 
-  const emailToast =()=>{
-    toast("An Verification Email send to your email address. Verify your account...",{
-      className:"error-toast",
-      draggable:false
-    })
-  }
+  const emailToast = () => {
+    toast(
+      "An Verification Email send to your email address. Verify your account...",
+      {
+        className: "error-toast",
+        draggable: false,
+      }
+    );
+  };
 
   const handleRegister = async () => {
     if (
@@ -72,11 +75,10 @@ function Register() {
     if (checked) {
       try {
         let user = { ...formData };
-        setloading(true)
+        setloading(true);
         let result = await saveUser(user);
-        setloading(false)
-         emailToast()
-
+        setloading(false);
+        emailToast();
 
         let data = {
           firstName: "",
@@ -92,12 +94,11 @@ function Register() {
         localStorage.removeItem("gender");
         localStorage.removeItem("dob");
         setTimeout(() => {
-          
           history.push("/");
         }, 5000);
       } catch (ex) {
         if (ex.response && ex.response.status === 400) {
-        setloading(false)
+          setloading(false);
 
           setErrors(ex.response.data);
         }
@@ -123,7 +124,6 @@ function Register() {
 
   useEffect(() => {}, [formData]);
 
-
   const loadingStyle = {
     zIndex: 50,
     display: "flex",
@@ -136,7 +136,7 @@ function Register() {
     top: "0",
     left: "0",
   };
-  
+
   const unLoadingStyle = {
     zIndex: -50,
     display: "none",
@@ -149,7 +149,6 @@ function Register() {
     top: "0",
     left: "0",
   };
-  
 
   return (
     <React.Fragment>
@@ -161,20 +160,21 @@ function Register() {
           justifyContent: "center",
           alignItems: "center",
           overflow: "hidden",
+          background: "#f7f7f7",
         }}
       >
         <div style={loading ? loadingStyle : unLoadingStyle}>
           <CircularProgress color="inherit" />
         </div>
         <ToastContainer />
-        <div style={{ padding: "30vw" }}>
+        <div style={{ padding: "30vw" }} id="registerInput">
           <div className="row" style={{ marginTop: "5vh" }}>
             {showError()}
             <div className="col-6">
               <label
                 htmlFor="firstName"
                 className="form-label"
-                style={{ color: "white" }}
+                style={{ color: "black" }}
               >
                 First Name
               </label>
@@ -192,7 +192,7 @@ function Register() {
               <label
                 htmlFor="lastName"
                 className="form-label"
-                style={{ color: "white" }}
+                style={{ color: "black" }}
               >
                 Last Name
               </label>
@@ -212,7 +212,7 @@ function Register() {
               <label
                 htmlFor="email"
                 className="form-label"
-                style={{ color: "white" }}
+                style={{ color: "black" }}
               >
                 Email address
               </label>
@@ -232,7 +232,7 @@ function Register() {
               <label
                 htmlFor="password"
                 className="form-label"
-                style={{ color: "white" }}
+                style={{ color: "black" }}
               >
                 Password
               </label>
@@ -252,7 +252,7 @@ function Register() {
               <label
                 htmlFor="confirmPassword"
                 className="form-label"
-                style={{ color: "white" }}
+                style={{ color: "black" }}
               >
                 Confirm Password
               </label>
@@ -288,7 +288,7 @@ function Register() {
                 <label
                   className="form-check-label"
                   htmlFor="flexCheckChecked"
-                  style={{ color: "white" }}
+                  style={{ color: "black" }}
                 >
                   I agree with <a href="#/term">term and condition</a>
                 </label>
@@ -305,14 +305,13 @@ function Register() {
                 alignItems: "center",
               }}
             >
-              <Button
-                variant="contained"
-                color="secondary"
-                style={{ width: "30vw", background: "#B71C1C" }}
+              <button
+                className="btn-hover color-10"
                 onClick={handleRegister}
+                style={{ width: "30vw" }}
               >
                 Sign Up
-              </Button>
+              </button>
             </div>
           </div>
         </div>

@@ -17,7 +17,7 @@ class Login extends Component {
       errors: "",
       loginErrors: "",
       errorShow: false,
-      loading:false
+      loading: false,
     };
   }
   componentWillReceiveProps(nextProps) {
@@ -34,7 +34,7 @@ class Login extends Component {
   handleSignIn = async () => {
     try {
       const { signInEmail, signInPassword } = this.state.signInData;
-      this.setState({loading:true})
+      this.setState({ loading: true });
       let data = await login(signInEmail, signInPassword);
       localStorage.setItem("token", data.data);
 
@@ -50,7 +50,7 @@ class Login extends Component {
       window.location = "#/timeline";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
-      this.setState({loading:false})
+        this.setState({ loading: false });
 
         this.setState({ loginErrorShow: true, loginErrors: ex.response.data });
         console.log(ex.response.data);
@@ -79,14 +79,16 @@ class Login extends Component {
     const { signInEmail, signInPassword } = this.state.signInData;
 
     return (
-      <Modal show={this.state.signInShow} onHide={this.props.handel}>
+      <Modal
+        show={this.state.signInShow}
+        onHide={this.props.handel}
+        id="loginModel"
+      >
         <Modal.Body>
           {this.showLoginError()}
-          <div
-                    style={this.state.loading ? loadingStyle : unLoadingStyle}
-                  >
-                    <CircularProgress color="inherit" />
-                  </div>
+          <div style={this.state.loading ? loadingStyle : unLoadingStyle}>
+            <CircularProgress color="inherit" />
+          </div>
           <div className="row">
             <div className="col">
               <h4>Sign In Here</h4>
@@ -134,16 +136,14 @@ class Login extends Component {
               </p>
             </div>
           </div>
-          <div style={{float:"right"}}>
-          <Button
-            className="btn btn-danger"
-            style={{ background: "#B71C1C" ,  }}
+
+          <button
+            className="btn-hover1 color-10"
             onClick={() => this.handleSignIn()}
+            style={{ float: "right", marginTop: "0px" }}
           >
             Login
-          </Button>
-          </div>
-          
+          </button>
         </Modal.Body>
         {/* <Modal.Footer>
         

@@ -54,7 +54,7 @@ export default function SearchAppBar() {
   const userFullName = useSelector((state) => state.userId.users[0].firstName);
 
   const unread = useSelector((state) => state.userId.unreadMessages);
-   
+
   useEffect(() => {
     if (users && userImage.length < 1) {
       setUserImage(users);
@@ -75,7 +75,7 @@ export default function SearchAppBar() {
   };
   const handelMessenger = () => {
     // history.push("/chat");
-    showCardDispatch(showFriendRequestBox(false))
+    showCardDispatch(showFriendRequestBox(false));
 
     dispatch(showMessage(!show));
   };
@@ -106,48 +106,37 @@ export default function SearchAppBar() {
 
   let handelFriendRequest = () => {
     dispatch(showMessage(false));
-   
-    showCardDispatch(showFriendRequestBox(!showCard))
+
+    showCardDispatch(showFriendRequestBox(!showCard));
   };
 
-  let badgeWithValue =()=>{
-    if(unread){
-      return(
-
+  let badgeWithValue = () => {
+    if (unread) {
+      return (
         <Badge
-        badgeContent={unread}
-        
-         color="primary"
-         classes={{ badge: classes.customBadge }}
-       >
-         <ChatBubbleIcon
-           style={{
-             color: "#B71C1C",
-           }}
-         />
-       </Badge>
-      )
+          badgeContent={unread}
+          color="primary"
+          classes={{ badge: classes.customBadge }}
+        >
+          <ChatBubbleIcon
+            style={{
+              color: "#B71C1C",
+            }}
+          />
+        </Badge>
+      );
+    } else {
+      return (
+        <Badge color="primary" classes={{ badge: classes.customBadge }}>
+          <ChatBubbleIcon
+            style={{
+              color: "#B71C1C",
+            }}
+          />
+        </Badge>
+      );
     }
-    else{
-      return(
-
-        <Badge
-      
-        
-         color="primary"
-         classes={{ badge: classes.customBadge }}
-       >
-         <ChatBubbleIcon
-           style={{
-             color: "#B71C1C",
-           }}
-         />
-       </Badge>
-      )
-    }
-
-   
-  }
+  };
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
@@ -197,7 +186,7 @@ export default function SearchAppBar() {
               </div>
               <div className="toolbarItems">
                 <IconButton onClick={handelMessenger}>
-                 {badgeWithValue()}
+                  {badgeWithValue()}
                 </IconButton>
               </div>
 

@@ -8,16 +8,13 @@ import SearchBar from "../Timline/SearchBar";
 import Alert from "react-bootstrap/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-
-
-
 class Work extends Component {
   state = {
     display: "block",
     workStyle: "none",
     collegeDisplay: "block",
     collegeForm: "none",
-    alertShow:false,
+    alertShow: false,
     loading: false,
 
     workData: {
@@ -80,7 +77,6 @@ class Work extends Component {
       jobDesc,
     };
     await this.setState({ uniData: uniData, workData: jobData });
-    
   };
 
   handelWorkPlace = () => {
@@ -88,15 +84,14 @@ class Work extends Component {
   };
   handelWorkSave = async () => {
     let { jobTitle, jobCity, jobDesc } = this.state.workData;
-    if(jobTitle.length<1 || jobCity.length <1 || jobDesc.length <1){
-      this.setState({alertShow:true})
-    }
-    else{
-      this.setState({alertShow:false, loading :true})
+    if (jobTitle.length < 1 || jobCity.length < 1 || jobDesc.length < 1) {
+      this.setState({ alertShow: true });
+    } else {
+      this.setState({ alertShow: false, loading: true });
 
       this.postWorkData();
 
-      this.setState({loading:false})
+      this.setState({ loading: false });
       this.setState({ display: "block", workStyle: "none" });
     }
   };
@@ -116,22 +111,22 @@ class Work extends Component {
       degreeDesc,
     };
 
-   
-      let result = await workPost(data);
-     
-
-
+    let result = await workPost(data);
   };
   handelCollege = () => {
     this.setState({ collegeDisplay: "none", collegeForm: "block" });
   };
   handelCollegeSave = () => {
     let { uniName, startDate, endDate, degreeDesc } = this.state.uniData;
-    if(uniName.length<1 || startDate.length <1 || endDate.length <1|| degreeDesc.length <1){
-      this.setState({alertShow:true})
-    }
-    else{
-      this.setState({alertShow:false, loading :true})
+    if (
+      uniName.length < 1 ||
+      startDate.length < 1 ||
+      endDate.length < 1 ||
+      degreeDesc.length < 1
+    ) {
+      this.setState({ alertShow: true });
+    } else {
+      this.setState({ alertShow: false, loading: true });
       this.postWorkData();
 
       this.setState({ collegeDisplay: "block", collegeForm: "none" });
@@ -261,11 +256,11 @@ class Work extends Component {
                     placeholder="Job Description"
                     onChange={this.handelWorkChange}
                   />
+
                   <button
-                    type="button"
-                    className="btn btn-success mt-3"
-                    style={{ float: "right" }}
+                    className="btn-hover1 color-10"
                     onClick={this.handelWorkSave}
+                    style={{ float: "right" }}
                   >
                     Save
                   </button>
@@ -320,11 +315,11 @@ class Work extends Component {
                     onChange={this.handelUniData}
                     placeholder="Enter Degree Description"
                   />
+
                   <button
-                    type="button"
-                    className="btn btn-success mt-3"
-                    style={{ float: "right" }}
+                    className="btn-hover1 color-10"
                     onClick={this.handelCollegeSave}
+                    style={{ float: "right" }}
                   >
                     Save
                   </button>
@@ -339,7 +334,6 @@ class Work extends Component {
 }
 
 export default Work;
-
 
 const loadingStyle = {
   zIndex: 50,

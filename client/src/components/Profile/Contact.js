@@ -19,7 +19,7 @@ class Contact extends Component {
       facebook: "",
       insta: "",
     },
-    alertShow:false,
+    alertShow: false,
 
     getData: {
       mobile: "",
@@ -57,7 +57,6 @@ class Contact extends Component {
     this.setState({ contact: "none", contactForm: "block" });
   };
 
-
   handelContactForm = async () => {
     let { mobile, facebook, insta } = this.state.data;
     let userId = await deCodeId();
@@ -67,13 +66,12 @@ class Contact extends Component {
       facebook: facebook,
       instagram: insta,
     };
-    if(mobile.length <1 || facebook.length <1 || insta.length <1 ){
-        this.setState({alertShow:true})
-    }
-    else{
-      this.setState({alertShow:false})
+    if (mobile.length < 1 || facebook.length < 1 || insta.length < 1) {
+      this.setState({ alertShow: true });
+    } else {
+      this.setState({ alertShow: false });
 
-      this.setState({loading:true})
+      this.setState({ loading: true });
       let result = await contactPost(data);
       let clear = {
         mobile: "",
@@ -81,12 +79,10 @@ class Contact extends Component {
         insta: "",
       };
       this.setState({ data: clear });
-      this.setState({loading:false})
+      this.setState({ loading: false });
 
       this.setState({ contact: "block", contactForm: "none" });
     }
-  
-    
   };
 
   render() {
@@ -164,7 +160,7 @@ class Contact extends Component {
                 className="col-md-9 profile"
                 style={{ padding: "25px", color: "white" }}
               >
-                  <Alert show={this.state.alertShow} variant="danger">
+                <Alert show={this.state.alertShow} variant="danger">
                   <p>Fill All Fields</p>
                 </Alert>
                 <div style={this.state.loading ? loadingStyle : unLoadingStyle}>
@@ -217,12 +213,11 @@ class Contact extends Component {
                     value={insta}
                     onChange={this.getContactData}
                   />
+
                   <button
-                    type="button"
-                    className="btn btn-success mt-3"
-                    style={{ float: "right" }}
+                    className="btn-hover1 color-10"
                     onClick={this.handelContactForm}
-                
+                    style={{ float: "right" }}
                   >
                     Save
                   </button>
@@ -237,8 +232,6 @@ class Contact extends Component {
 }
 
 export default Contact;
-
-
 
 const loadingStyle = {
   zIndex: 50,

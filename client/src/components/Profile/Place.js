@@ -204,11 +204,11 @@ class Place extends Component {
                     placeholder="Add Current Work Place"
                     onChange={this.onChangeCity}
                   />
+
                   <button
-                    type="button"
-                    className="btn btn-success mt-3"
-                    style={{ float: "right" }}
+                    className="btn-hover1 color-10"
                     onClick={this.handelCurrentWorkPlace}
+                    style={{ float: "right" }}
                   >
                     Save
                   </button>
@@ -234,11 +234,11 @@ class Place extends Component {
                     onChange={this.onChangeCity}
                     placeholder="Add Home Town"
                   />
+
                   <button
-                    type="button"
-                    className="btn btn-success mt-3"
-                    style={{ float: "right" }}
+                    className="btn-hover1 color-10"
                     onClick={this.handelHomeTownForm}
+                    style={{ float: "right" }}
                   >
                     Save
                   </button>

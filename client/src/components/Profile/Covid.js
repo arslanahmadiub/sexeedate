@@ -196,7 +196,7 @@ class Covid extends Component {
                   <h4 className="mt-4" style={{ textAlign: "center" }}>
                     Answer the Following Question
                   </h4>
-                  <span style={{ fontSize: "25px" }} onClick={this.handelCovid}>
+                  <span style={{ fontSize: "16px" }} onClick={this.handelCovid}>
                     Fill Form
                   </span>
                   <h5 className="mt-3">Q: What is your comfort level?</h5>
@@ -272,13 +272,13 @@ class Covid extends Component {
                     placeholder=" Q: If Does COVID make you nervous?"
                     onChange={this.handleQuestionChange}
                   />
+
                   <button
-                    type="button"
-                    className="btn btn-success mt-3"
-                    style={{ float: "right" }}
+                    className="btn-hover1 color-10"
                     onClick={this.handelCovidForm}
+                    style={{ float: "right" }}
                   >
-                    Submit
+                    Save
                   </button>
                 </div>
 

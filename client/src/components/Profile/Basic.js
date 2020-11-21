@@ -248,7 +248,7 @@ class Basic extends Component {
       <React.Fragment>
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
           {/* <SearchAppBar /> */}
-          <SearchBar/>
+          <SearchBar />
           <div
             className="container"
             style={{
@@ -296,16 +296,12 @@ class Basic extends Component {
                   <Link to="/covid" style={{ marginTop: "5px" }}>
                     Covid Question
                   </Link>
-                  <Link
-                    to="/setting"
-                    style={{ marginTop: "5px" }}
-                    
-                  >
+                  <Link to="/setting" style={{ marginTop: "5px" }}>
                     Setting
                   </Link>
                   <Link to="/payment" style={{ marginTop: "5px" }}>
-                  Payment
-                </Link>
+                    Payment
+                  </Link>
                 </div>
               </div>
               <div
@@ -387,7 +383,7 @@ class Basic extends Component {
                   />
 
                   <label htmlFor="pasport" className="mt-3">
-                    Attach Passport
+                    Please Attach a lethal document for Verification
                   </label>
                   <input
                     type="file"
@@ -420,11 +416,11 @@ class Basic extends Component {
                       <span>Your Custom Message</span>
                     </div>
                   </DropzoneArea>
+
                   <button
-                    type="button"
-                    className="btn btn-success mt-3"
-                    style={{ float: "right" }}
+                    className="btn-hover1 color-10"
                     onClick={this.handleBasicInfoForm}
+                    style={{ float: "right" }}
                   >
                     Save
                   </button>

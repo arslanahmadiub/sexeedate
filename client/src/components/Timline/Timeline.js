@@ -277,16 +277,23 @@ function Timeline() {
         >
           <Alert
             show={showAlert}
-            variant="success"
+            variant="danger"
             style={{ zIndex: "400000", margin: "20%" }}
           >
             <Alert.Heading>Complete your profile first...</Alert.Heading>
             <p>Click on button below to complete your profile.</p>
             <hr />
             <div className="d-flex justify-content-end">
-              <Button variant="outline-success" onClick={handelProfileComplete}>
+              {/* <Button variant="outline-success" onClick={handelProfileComplete}>
                 Click
-              </Button>
+              </Button> */}
+              <button
+                className="btn-hover1 color-10"
+                onClick={handelProfileComplete}
+                style={{ marginTop: "0px" }}
+              >
+                Click
+              </button>
             </div>
           </Alert>
           <div style={{ overflow: "auto", marginBottom: "4rem" }}>
