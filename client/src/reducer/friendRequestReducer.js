@@ -3,6 +3,7 @@ const initalState = {
   friendVideoShow: false,
   freindRequest: [],
   friendRequestProfile: [],
+  logout: false,
 };
 
 export const friendRequestReducer = (state = initalState, action) => {
@@ -11,6 +12,11 @@ export const friendRequestReducer = (state = initalState, action) => {
       return {
         ...state,
         requestBoxShow: action.payload,
+      };
+    case "SHOW_LOGOUT":
+      return {
+        ...state,
+        logout: action.payload,
       };
     case "SHOW_FRIEND_VIDEO":
       return {

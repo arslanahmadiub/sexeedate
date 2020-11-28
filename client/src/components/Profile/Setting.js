@@ -4,39 +4,73 @@ import { Link } from "react-router-dom";
 import { updateUserPassword } from "../../services/profile";
 import SearchBar from "../Timline/SearchBar";
 import { deCodeId } from "../../services/userId";
+import { currentPass } from "../../services/profile";
 
 class Setting extends Component {
   state = {
-    UpdatePassword: "",
+    confirmNewPassword: "",
+    currentPassword: "",
+    newPassword: "",
     update: false,
     alertText: "",
   };
 
   onChangePassword = async (e) => {
-    await this.setState({ UpdatePassword: e.target.value });
+    await this.setState({ [e.target.name]: e.target.value });
   };
 
   handelPassword = async () => {
+    let { currentPassword, newPassword, confirmNewPassword } = this.state;
     let userId = await deCodeId();
-    let passData = {
-      userId: userId,
-      password: this.state.UpdatePassword,
-    };
-    if (this.state.UpdatePassword.length < 1) {
+    if (newPassword !== confirmNewPassword) {
+      this.setState({ alertText: "Password Not Match...." });
+      this.setState({ update: true });
+    } else if (newPassword.length < 1 || confirmNewPassword.length < 1) {
       this.setState({ alertText: "Enter Password..." });
       this.setState({ update: true });
     } else {
-      this.setState({ alertText: "Your Password is successfully update.." });
-      await updateUserPassword(passData);
-      this.setState({ update: true, UpdatePassword: "" });
-      setTimeout(() => {
+      if (currentPassword.length > 0) {
         this.setState({ update: false });
-      }, 5000);
+
+        let passData = {
+          userId: userId,
+          password: currentPassword,
+        };
+        let { data } = await currentPass(passData);
+        if (data === "Password Not Matach") {
+          this.setState({ alertText: "Current Password Not Correct...." });
+          this.setState({ update: true });
+        } else {
+          let passData = {
+            userId: userId,
+            password: newPassword,
+          };
+
+          this.setState({
+            alertText: "Your Password is successfully update..",
+          });
+          await updateUserPassword(passData);
+          this.setState({ update: true, UpdatePassword: "" });
+          setTimeout(() => {
+            this.setState({ update: false });
+          }, 5000);
+          this.setState({
+            confirmNewPassword: "",
+            currentPassword: "",
+            newPassword: "",
+          });
+        }
+      }
     }
   };
 
   render() {
-    let { update } = this.state;
+    let {
+      update,
+      currentPassword,
+      newPassword,
+      confirmNewPassword,
+    } = this.state;
     return (
       <React.Fragment>
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
@@ -114,24 +148,24 @@ class Setting extends Component {
                   <input
                     type="text"
                     className="form-control mt-3"
-                    name="UpdatePassword"
-                    value={this.state.UpdatePassword}
+                    name="currentPassword"
+                    value={currentPassword}
                     placeholder="Current Password"
                     onChange={this.onChangePassword}
                   />
                   <input
                     type="text"
                     className="form-control mt-3"
-                    name="UpdatePassword"
-                    value={this.state.UpdatePassword}
+                    name="newPassword"
+                    value={newPassword}
                     placeholder="New Password"
                     onChange={this.onChangePassword}
                   />
                   <input
                     type="text"
                     className="form-control mt-3"
-                    name="UpdatePassword"
-                    value={this.state.UpdatePassword}
+                    name="confirmNewPassword"
+                    value={confirmNewPassword}
                     placeholder="Confirm New Password"
                     onChange={this.onChangePassword}
                   />

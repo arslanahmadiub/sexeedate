@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { Alert } from "react-bootstrap";
-import {updateUserPassword} from '../services/profile'
+import { updateUserPassword } from "../services/profile";
 const jwt = require("jsonwebtoken");
 
 function useQuery() {
@@ -12,7 +12,7 @@ function Forgot(props) {
   const [pass, setPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [userId, setUserId] = useState("");
-  const [errors, setErrors] = useState("")
+  const [errors, setErrors] = useState("");
   const history = useHistory();
 
   let query = useQuery();
@@ -27,28 +27,26 @@ function Forgot(props) {
     await setUserId(header._id);
   };
 
-  let handelConfirmPassword=(e)=>{
-    setConfirmPass(e.target.value)
-  }
-  let handelPassword=(e)=>{
-    setPass(e.target.value)
-  }
+  let handelConfirmPassword = (e) => {
+    setConfirmPass(e.target.value);
+  };
+  let handelPassword = (e) => {
+    setPass(e.target.value);
+  };
 
-  let handelReset =async()=>{
-    if(pass!==confirmPass ){
-      setErrors("Password Not Match...")
+  let handelReset = async () => {
+    if (pass !== confirmPass) {
+      setErrors("Password Not Match...");
+    } else {
+      setErrors("");
+      let newData = {
+        userId: userId,
+        password: pass,
+      };
+      let { data } = await updateUserPassword(newData);
+      history.push("/");
     }
-    else{
-      setErrors("")
-      let newData={
-        userId:userId,
-        password:pass
-      }
-     let {data}= await updateUserPassword(newData)
-    history.push("/");
-     
-    }
-  }
+  };
 
   return (
     <React.Fragment>
@@ -61,10 +59,21 @@ function Forgot(props) {
           overflow: "hidden",
         }}
       >
-        <div className="container" style={{ padding: "20vw" }}>
+        <div
+          className="container"
+          style={{ padding: "20vw" }}
+          id="forgotFormControl"
+        >
           <div className="row">
             <div className="col-12">
-  <Alert variant="warning" style={errors.length>0 ?{display:"flex"}:{display:"none"}}>{errors}</Alert>
+              <Alert
+                variant="warning"
+                style={
+                  errors.length > 0 ? { display: "flex" } : { display: "none" }
+                }
+              >
+                {errors}
+              </Alert>
 
               <label
                 htmlFor="password"
@@ -97,25 +106,21 @@ function Forgot(props) {
                 id="confirmPassword"
                 placeholder="Enter Password Again"
                 onChange={handelConfirmPassword}
-
               />
             </div>
           </div>
 
           <div className="row mt-4">
             <div className="col-12">
-              <Button
-                variant="outlined"
-                color="secondary"
+              <button
+                className="btn-hover color-10"
+                onClick={handelReset}
                 style={{
                   float: "right",
-                  color: "red",
-                  border: "1px solid red",
                 }}
-                onClick={handelReset}
               >
                 Reset Password
-              </Button>
+              </button>
             </div>
           </div>
         </div>

@@ -14,6 +14,7 @@ const userImageGetUrl = apiEndPoint + "/getUserImage";
 const updatePasswordUrl = apiEndPoint + "/updatePass";
 const forgetPassUrl = apiEndPoint + "/forgetPass";
 const proUserUrl = apiEndPoint + "/proUser";
+const currentPassUrl = apiEndPoint + "/currentPass";
 
 export async function profileGetFunction() {
   return await axios.get(profileGetUrl);
@@ -53,6 +54,9 @@ export async function sendEmailForUpdate(data) {
 
 export async function proUser(data) {
   return await axios.post(proUserUrl, data);
+}
+export async function currentPass(data) {
+  return await axios.post(currentPassUrl, data);
 }
 
 export async function currentUser() {

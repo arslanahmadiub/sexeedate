@@ -13,6 +13,7 @@ import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import { showMessage } from "../../action/userIdAction";
 import Badge from "@material-ui/core/Badge";
+import { showLogout } from "../../action/friendRequestAction";
 
 import { fade, makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
@@ -44,8 +45,10 @@ export default function SearchAppBar() {
   let [userName, setUserName] = useState("");
   const showCardDispatch = useDispatch();
   const showCard = useSelector((state) => state.friendRequest.requestBoxShow);
+  const showLogoutBadge = useSelector((state) => state.friendRequest.logout);
 
   const dispatch = useDispatch();
+  const dispatchLogout = useDispatch();
   const classes = useStyles();
   const users = useSelector(
     (state) => state.userId.users[0].Detail.userImages.imageUrl
@@ -83,8 +86,7 @@ export default function SearchAppBar() {
     history.push("/home");
   };
   const handelLogout = async () => {
-    history.push("/");
-    localStorage.removeItem("token");
+    dispatchLogout(showLogout(!showLogoutBadge));
   };
 
   useEffect(() => {

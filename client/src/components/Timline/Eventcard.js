@@ -57,10 +57,6 @@ export default function Eventcard(props) {
   };
   const handleClose = () => {
     setOpen(false);
-
-    let imageUrl = "http://localhost:5000/images/images_1603551793768.jpg";
-    console.log(imageUrl.slice(29, imageUrl.length));
-    console.log(imageUrl);
   };
 
   return (

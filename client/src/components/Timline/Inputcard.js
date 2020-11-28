@@ -88,21 +88,7 @@ export default function Inputcard() {
 
   useEffect(() => {
     fetchCurrentUser();
-
-    getTime();
   }, []);
-
-  // let fetchCurrentImage = async () => {
-  //   let id = await deCodeId();
-  //   let userId = { userId: id };
-  //   let { data } = await userImageGet(userId);
-
-  //   if (data.length > 0) {
-  //     let image = data[0].User.userImages[0];
-
-  //     setUserImage(image.imageUrl);
-  //   }
-  // };
 
   let fetchCurrentUser = async () => {
     let id = await deCodeId();
@@ -122,16 +108,7 @@ export default function Inputcard() {
     if (eventMessage.length > 1) {
       let { data } = await postPost(post);
       setOpen(false);
-      console.log(data);
     }
-  };
-
-  let getTime = () => {
-    // const m = moment();
-    // let currentTime = m.toString();
-    // const m2 = moment("Thu Oct 22 2020 13:57:54 GMT+0500");
-    // console.log(m2.fromNow())
-    // console.log(moment().toString())
   };
 
   return (

@@ -99,6 +99,7 @@ app.use("/packagePost", require("./routes/packagesPost"));
 app.use("/packageGet", require("./routes/packageGet"));
 app.use("/packageDelete", require("./routes/deletePackage"));
 app.use("/proUser", require("./routes/proUser"));
+app.use("/currentPass", require("./routes/getCurrentPass"));
 
 app.get("/confirm", require("./routes/confirmEmail"));
 

@@ -60,62 +60,77 @@ function MessageList(props) {
   const showDispatch = useDispatch();
   const unreadDispatch = useDispatch();
 
-
   useEffect(() => {
     if (friendMessages.length > 0) {
       setMessage(friendMessages);
-    
-      countUnread()
+
+      countUnread();
     }
   }, [friendMessages]);
 
   let handelClick = (e) => {
     props.change(e);
     showDispatch(showMessage(!show));
-    
   };
 
-  let countUnread =()=>{
-    let count =0;
-    for (let i=0; i<friendMessages.length; i++){
-        if(friendMessages[i].receiverId === currentUser  && friendMessages[i].read ==false   ){
-            count++
-        }
+  let countUnread = () => {
+    let count = 0;
+    for (let i = 0; i < friendMessages.length; i++) {
+      if (
+        friendMessages[i].receiverId === currentUser &&
+        friendMessages[i].read == false
+      ) {
+        count++;
+      }
     }
-    
-    unreadDispatch(unreadMessages(count))
-  }
+
+    unreadDispatch(unreadMessages(count));
+  };
 
   return (
-    <div className={show ? "notifi-box" : "notifi-box2"} id="box">
-      {message.length > 0
-        ? message.map((item, index) => {
-            return (
-              <div
-                id="message"
-                onClick={() => {
-                  handelClick(item);
-                }}
-                key={index}
+    <React.Fragment>
+      <div className={show ? "notifi-box" : "notifi-box2"}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <a href="#/chat" id="allChat">
+            See All Chat
+          </a>
+        </div>
+        {message.length > 0
+          ? message.map((item, index) => {
+              return (
+                <div
+                  id="message"
+                  onClick={() => {
+                    handelClick(item);
+                  }}
+                  key={index}
+                >
+                  <div id="messageItem">
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={item.avatar}
+                      className={classes.large}
+                    />
+                    <div id="messengerName">
+                      <h5>{item.name}</h5>
 
-              >
-                <div id="messageItem">
-                  <Avatar
-                    alt="Remy Sharp"
-                    src={item.avatar}
-                    className={classes.large}
-                  />
-                  <div id="messengerName">
-                    <h5>{item.name}</h5>
-
-                    <div className={item.senderId === currentUser ? "block-ellipsis" : "block-ellipsis-unread"}>{item.lastMessage}</div>
+                      <div
+                        className={
+                          item.senderId === currentUser
+                            ? "block-ellipsis"
+                            : "block-ellipsis-unread"
+                        }
+                      >
+                        {item.lastMessage}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })
-        : null}
-    </div>
+              );
+            })
+          : null}
+      </div>
+    </React.Fragment>
   );
 }
 

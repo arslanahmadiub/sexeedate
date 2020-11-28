@@ -34,6 +34,7 @@ import { unreadMessages } from "../../action/userIdAction";
 import { setFriendRequestData } from "../../action/friendRequestAction";
 import FriendRequestList from "./FriendRequestList";
 import FriendCard from "./FriendCard";
+import LogoutDropdown from "./LogoutDropdown";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -246,6 +247,7 @@ function Timeline() {
       <FriendRequestList />
       <SearchAppBar />
       <FriendCard />
+      <LogoutDropdown />
 
       <Grid container className={classes.mainContainer}>
         <Chatbox
