@@ -77,7 +77,6 @@ function Timeline() {
   const unreadDispatch = useDispatch();
   const friendMessages = useSelector((state) => state.userId.messageFriendList);
   const currentUser = useSelector((state) => state.userId.users[0]._id);
-
   const [friendData, setFriendData] = useState({
     friendId: "",
     friendName: "",
@@ -159,7 +158,13 @@ function Timeline() {
   };
 
   let fetchPostData = async () => {
-    let { data } = await postGet();
+    let userId = await deCodeId();
+    let id = {
+      userId: userId,
+    };
+    console.log(id);
+    let { data } = await postGet(id);
+
     await setPostData(data);
   };
   let getTime = (data) => {
@@ -220,6 +225,20 @@ function Timeline() {
     await setShowChatBox(true);
     myRef.current.fetchMessages();
     myRef.current.getChatNumber();
+  };
+
+  let showChat = async (e) => {
+    let data = {
+      friendId: e.userId,
+      friendName: e.name,
+      friendImage: e.image,
+    };
+    if (e.userId !== currentUser) {
+      setFriendData(data);
+      await setShowChatBox(true);
+      myRef.current.fetchMessages();
+      myRef.current.getChatNumber();
+    }
   };
 
   let countUnread = () => {
@@ -308,6 +327,10 @@ function Timeline() {
                   time={getTime(item.dateTime)}
                   message={item.message}
                   image={item.UserImage.userImages.imageUrl}
+                  userId={item.userId}
+                  showChat={(data) => {
+                    showChat(data);
+                  }}
                 />
               );
             })}
@@ -336,14 +359,14 @@ function Timeline() {
               marginBottom: "5rem",
             }}
           >
-            <form className="form-inline position-relative mt-3 mr-2">
+            {/* <form className="form-inline position-relative mt-3 mr-2">
               <input
                 type="search"
                 className="form-control"
                 id="conversations"
                 placeholder="Search Friend..."
               />
-            </form>
+            </form> */}
 
             {friend.map((item, id) => {
               return (

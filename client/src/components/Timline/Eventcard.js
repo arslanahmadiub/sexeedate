@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import MessageIcon from "@material-ui/icons/Message";
 
 const useStyles = makeStyles((theme) => ({
@@ -50,13 +51,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Eventcard(props) {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [favorite, setFavorite] = useState(false);
+  const [message, setMessage] = useState(false);
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleFavorite = () => {
+    setFavorite(!favorite);
   };
-  const handleClose = () => {
-    setOpen(false);
+  const handleMessage = (data) => {
+    props.showChat(data);
   };
 
   return (
@@ -99,13 +101,20 @@ export default function Eventcard(props) {
             }}
           >
             <div>
-              <IconButton style={{ outline: "none" }} onClick={handleClose}>
-                <FavoriteIcon style={{ color: "red" }} />
+              <IconButton style={{ outline: "none" }} onClick={handleFavorite}>
+                {favorite ? (
+                  <FavoriteIcon style={{ color: "#B71C1C" }} />
+                ) : (
+                  <FavoriteBorderIcon style={{ color: "#B71C1C" }} />
+                )}
               </IconButton>
             </div>
             <div>
-              <IconButton style={{ outline: "none" }} onClick={handleClose}>
-                <MessageIcon style={{ color: "red" }} />
+              <IconButton
+                style={{ outline: "none" }}
+                onClick={() => handleMessage(props)}
+              >
+                <MessageIcon style={{ color: "#B71C1C" }} />
               </IconButton>
             </div>
           </div>

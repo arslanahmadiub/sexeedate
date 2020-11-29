@@ -100,6 +100,7 @@ app.use("/packageGet", require("./routes/packageGet"));
 app.use("/packageDelete", require("./routes/deletePackage"));
 app.use("/proUser", require("./routes/proUser"));
 app.use("/currentPass", require("./routes/getCurrentPass"));
+app.use("/updateRole", require("./routes/updateRole"));
 
 app.get("/confirm", require("./routes/confirmEmail"));
 
