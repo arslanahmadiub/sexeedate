@@ -40,6 +40,7 @@ class Chat extends Component {
     await this.fetchChataData();
     await this.fetchCurrentImage();
     await this.getMessage();
+    this.getChatMember();
   }
 
   fetchCurrentImage = async () => {
@@ -157,7 +158,15 @@ class Chat extends Component {
       history: { push },
     } = this.props;
 
-    push("/timeline");
+    push("/");
+  };
+
+  handelProfile = () => {
+    const {
+      history: { push },
+    } = this.props;
+
+    push("/basicInfo");
   };
   handelMessenger = () => {
     const {
@@ -180,6 +189,21 @@ class Chat extends Component {
     // push("/");
     // localStorage.removeItem("token");
     await this.setState({ badgeShow: !this.state.badgeShow });
+  };
+
+  getChatMember = async () => {
+    let { chatData } = this.state;
+    if (chatData.length > 0) {
+      let firstObject = chatData[0];
+
+      await this.setState({
+        receiverId: firstObject.id,
+        chat: firstObject.chat,
+        friendImage: firstObject.avatar,
+        friendName: firstObject.name,
+      });
+      await this.scrollToBottom();
+    }
   };
 
   handelChatClick = async (e) => {
@@ -359,6 +383,9 @@ class Chat extends Component {
 
                           <div>
                             <IconButton onClick={this.handelTimeline}>
+                              <h5>Sexee Date</h5>
+                            </IconButton>
+                            <IconButton onClick={this.handelProfile}>
                               <Avatar
                                 alt="Remy Sharp"
                                 src={userAvatar}
@@ -368,7 +395,6 @@ class Chat extends Component {
                                 }}
                               />
                             </IconButton>
-
                             <IconButton onClick={this.handelFavrot}>
                               <FavoriteIcon
                                 style={{
