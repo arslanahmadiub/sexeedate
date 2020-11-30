@@ -20,7 +20,13 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import "./admin.css";
 import MaterialTableDemo from "./MaterialTableDemo";
-import ListAltIcon from '@material-ui/icons/ListAlt';
+import ListAltIcon from "@material-ui/icons/ListAlt";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import LogoutDropdown from "../Timline/LogoutDropdown";
+import { useDispatch } from "react-redux";
+import { showLogout } from "../../action/friendRequestAction";
+import { useSelector } from "react-redux";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -86,6 +92,8 @@ export default function Admin() {
   const theme = useTheme();
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
+  const dispatchLogout = useDispatch();
+  const showLogoutBadge = useSelector((state) => state.friendRequest.logout);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -106,6 +114,9 @@ export default function Admin() {
   const handlePackages = () => {
     history.push("/admin/package");
   };
+  const handelLogout = async () => {
+    dispatchLogout(showLogout(!showLogoutBadge));
+  };
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -124,9 +135,21 @@ export default function Admin() {
           >
             <MenuIcon />
           </IconButton>
+
           <Typography variant="h6" noWrap>
             Sexee Dating Admin Panel
           </Typography>
+          <div
+            style={{
+              display: "flex",
+              width: "70%",
+              justifyContent: "flex-end",
+            }}
+          >
+            <IconButton color="inherit" onClick={handelLogout}>
+              <ExitToAppIcon />
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -155,28 +178,24 @@ export default function Admin() {
         <List>
           <ListItem button onClick={handleUser}>
             <ListItemIcon>
-             
-              <InboxIcon /> 
+              <InboxIcon />
             </ListItemIcon>
             <ListItemText primary="Users" />
           </ListItem>
           <ListItem button onClick={handlePost}>
             <ListItemIcon>
-             
-              <MailIcon /> 
+              <MailIcon />
             </ListItemIcon>
             <ListItemText primary="Post" />
           </ListItem>
           <ListItem button onClick={handleVerification}>
             <ListItemIcon>
-             
               <MailIcon />
             </ListItemIcon>
             <ListItemText primary="Verification" />
           </ListItem>
           <ListItem button onClick={handlePackages}>
             <ListItemIcon>
-             
               <ListAltIcon />
             </ListItemIcon>
             <ListItemText primary="Packages" />
@@ -189,6 +208,8 @@ export default function Admin() {
         })}
       >
         <div className={classes.drawerHeader} />
+        <LogoutDropdown />
+
         <MaterialTableDemo />
       </main>
     </div>

@@ -20,6 +20,7 @@ import { userImageGet } from "../../services/friendGet";
 import { deCodeId } from "../../services/userId";
 import { getFullUserDetail } from "../../services/profile";
 import { useSelector } from "react-redux";
+import { showLogout } from "../../action/friendRequestAction";
 
 import "./Timeline.css";
 
@@ -52,6 +53,8 @@ export default function SearchBar() {
   );
   const show = useSelector((state) => state.userId.showMessage);
   const userFullName = useSelector((state) => state.userId.users[0].firstName);
+  const dispatchLogout = useDispatch();
+  const showLogoutBadge = useSelector((state) => state.friendRequest.logout);
 
   const unread = useSelector((state) => state.userId.unreadMessages);
 
@@ -68,7 +71,7 @@ export default function SearchBar() {
 
   const history = useHistory();
   const handelTimeline = () => {
-    history.push("/timeline");
+    history.push("/basicInfo");
   };
   const handelHome = () => {
     history.push("/basicInfo");
@@ -83,8 +86,9 @@ export default function SearchBar() {
     history.push("/home");
   };
   const handelLogout = async () => {
-    history.push("/");
-    localStorage.removeItem("token");
+    // history.push("/");
+    // localStorage.removeItem("token");
+    dispatchLogout(showLogout(!showLogoutBadge));
   };
 
   useEffect(() => {
@@ -106,8 +110,11 @@ export default function SearchBar() {
 
   let handelFriendRequest = () => {
     dispatch(showMessage(false));
-   
-    showCardDispatch(showFriendRequestBox(!showCard))
+
+    showCardDispatch(showFriendRequestBox(!showCard));
+  };
+  const showHomePage = () => {
+    history.push("/timeline");
   };
   return (
     <div className={classes.root}>
@@ -117,7 +124,9 @@ export default function SearchBar() {
         >
           <Toolbar>
             <div className="toolbarItems">
-              <h4 style={{ color: "#B71C1C" }}> Sexee Date</h4>
+              <h4 style={{ color: "#B71C1C" }} onClick={showHomePage}>
+                Sexee Date
+              </h4>
             </div>
             <div
               style={{
@@ -142,21 +151,18 @@ export default function SearchBar() {
                 </IconButton>
               </div>
               <div className="toolbarItems">
-                <IconButton onClick={handelHome} style={{ boxShadow: "none" }}>
+                <IconButton style={{ boxShadow: "none" }}>
                   <h6>{userName.length > 0 ? userName : "Profile"}</h6>
                 </IconButton>
               </div>
 
-         
               <div className="toolbarItems">
                 <IconButton onClick={handelMessenger}>
-                 
-                    <ChatBubbleIcon
-                      style={{
-                        color: "#B71C1C",
-                      }}
-                    />
-                  
+                  <ChatBubbleIcon
+                    style={{
+                      color: "#B71C1C",
+                    }}
+                  />
                 </IconButton>
               </div>
 

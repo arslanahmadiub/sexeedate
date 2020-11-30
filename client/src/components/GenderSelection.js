@@ -19,6 +19,9 @@ function GenderSelection() {
   const handelGender = async (e) => {
     await setGender(e.target.value);
   };
+  let handelLoginClick = () => {
+    history.push("/");
+  };
 
   return (
     <React.Fragment>
@@ -96,10 +99,31 @@ function GenderSelection() {
           justifyContent: "center",
         }}
       >
- 
         <button className="btn-hover color-11 " onClick={handelGenderClick}>
           Submit
         </button>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          width: "100vw",
+          position: "absolute",
+          top: "90vh",
+          justifyContent: "center",
+        }}
+      >
+        <h5
+          style={{
+            color: "#B71C1C",
+            textAlign: "center",
+
+            fontSize: "12px",
+            cursor: "pointer",
+          }}
+          onClick={handelLoginClick}
+        >
+          For Login Click Here...
+        </h5>
       </div>
     </React.Fragment>
   );

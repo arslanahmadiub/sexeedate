@@ -7,6 +7,7 @@ import { deCodeId } from "../../services/userId";
 import SearchBar from "../Timline/SearchBar";
 import Alert from "react-bootstrap/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import LogoutDropdown from "../Timline/LogoutDropdown";
 
 class Covid extends Component {
   state = {
@@ -124,6 +125,8 @@ class Covid extends Component {
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
           {/* <SearchAppBar/> */}
           <SearchBar />
+          <LogoutDropdown />
+
           <div
             className="container"
             style={{
@@ -196,7 +199,10 @@ class Covid extends Component {
                   <h4 className="mt-4" style={{ textAlign: "center" }}>
                     Answer the Following Question
                   </h4>
-                  <span style={{ fontSize: "16px" }} onClick={this.handelCovid}>
+                  <span
+                    style={{ fontSize: "16px", color: "blue" }}
+                    onClick={this.handelCovid}
+                  >
                     Fill Form
                   </span>
                   <h5 className="mt-3">Q: What is your comfort level?</h5>

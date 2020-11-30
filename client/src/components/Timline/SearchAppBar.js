@@ -71,11 +71,9 @@ export default function SearchAppBar() {
 
   const history = useHistory();
   const handelTimeline = () => {
-    history.push("/timeline");
-  };
-  const handelHome = () => {
     history.push("/basicInfo");
   };
+
   const handelMessenger = () => {
     // history.push("/chat");
     showCardDispatch(showFriendRequestBox(false));
@@ -85,6 +83,10 @@ export default function SearchAppBar() {
   const handelFavrot = () => {
     history.push("/home");
   };
+  const showHomePage = () => {
+    history.push("/timeline");
+  };
+
   const handelLogout = async () => {
     dispatchLogout(showLogout(!showLogoutBadge));
   };
@@ -147,7 +149,9 @@ export default function SearchAppBar() {
         >
           <Toolbar>
             <div className="toolbarItems">
-              <h4 style={{ color: "#B71C1C" }}> Sexee Date</h4>
+              <h4 style={{ color: "#B71C1C" }} onClick={showHomePage}>
+                Sexee Date
+              </h4>
             </div>
             <div
               style={{
@@ -172,7 +176,7 @@ export default function SearchAppBar() {
                 </IconButton>
               </div>
               <div className="toolbarItems">
-                <IconButton onClick={handelHome} style={{ boxShadow: "none" }}>
+                <IconButton style={{ boxShadow: "none" }}>
                   <h6>{userName.length > 0 ? userName : "Profile"}</h6>
                 </IconButton>
               </div>

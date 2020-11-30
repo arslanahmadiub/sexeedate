@@ -162,7 +162,7 @@ function Timeline() {
     let id = {
       userId: userId,
     };
-    console.log(id);
+
     let { data } = await postGet(id);
 
     await setPostData(data);

@@ -8,6 +8,7 @@ import { deCodeId } from "../../services/userId";
 import SearchBar from "../Timline/SearchBar";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Alert from "react-bootstrap/Alert";
+import LogoutDropdown from "../Timline/LogoutDropdown";
 
 class Contact extends Component {
   state = {
@@ -101,6 +102,8 @@ class Contact extends Component {
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
           {/* <SearchAppBar/> */}
           <SearchBar />
+          <LogoutDropdown />
+
           <div
             className="container"
             style={{
@@ -169,7 +172,9 @@ class Contact extends Component {
                 {/* Work Section */}
                 <h3>Contact Info</h3>
                 <div style={contactStyle}>
-                  <span onClick={this.handelContact}>Add Contact Info</span>
+                  <span onClick={this.handelContact} style={{ color: "blue" }}>
+                    Add Contact Info
+                  </span>
                   <h5 className="mt-2">{this.state.getData.mobile}</h5>
                   <h6 style={{ marginTop: "-3px", fontSize: "12px" }}>
                     Mobile

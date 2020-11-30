@@ -10,6 +10,7 @@ import { deCodeId } from "../../services/userId";
 import { matchGet } from "../../services/matching";
 import { getUserGender } from "../../services/profile";
 import SearchBar from "../Timline/SearchBar";
+import LogoutDropdown from "../Timline/LogoutDropdown";
 let { AgeFromDateString, AgeFromDate } = require("age-calculator");
 
 class Deck extends Component {
@@ -80,6 +81,7 @@ class Deck extends Component {
         >
           {/* <SearchAppBar /> */}
           <SearchBar />
+          <LogoutDropdown />
           <div className="swiper-container" style={{ marginTop: "12vh" }}>
             <div className="swiper-wrapper">
               {this.state.data.length > 0 ? (

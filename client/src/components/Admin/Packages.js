@@ -30,6 +30,11 @@ import { packagePost } from "../../services/packages";
 import { packageGet } from "../../services/packages";
 import { packageDelete } from "../../services/packages";
 import Alert from "react-bootstrap/Alert";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import LogoutDropdown from "../Timline/LogoutDropdown";
+import { useDispatch } from "react-redux";
+import { showLogout } from "../../action/friendRequestAction";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -96,7 +101,8 @@ export default function Packages() {
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
   const [show, setShow] = useState(false);
-
+  const dispatchLogout = useDispatch();
+  const showLogoutBadge = useSelector((state) => state.friendRequest.logout);
   let [formData, setformData] = useState({
     packageName: "",
     packageDuration: "",
@@ -135,7 +141,6 @@ export default function Packages() {
       packageId: id,
     };
     let { data } = await packageDelete(packageId);
- 
   };
   let getPackages = async () => {
     let { data } = await packageGet();
@@ -166,7 +171,9 @@ export default function Packages() {
       });
     }
   };
-
+  const handelLogout = async () => {
+    dispatchLogout(showLogout(!showLogoutBadge));
+  };
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -188,6 +195,17 @@ export default function Packages() {
           <Typography variant="h6" noWrap>
             Sexee Dating Admin Panel
           </Typography>
+          <div
+            style={{
+              display: "flex",
+              width: "70%",
+              justifyContent: "flex-end",
+            }}
+          >
+            <IconButton color="inherit" onClick={handelLogout}>
+              <ExitToAppIcon />
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -246,6 +264,7 @@ export default function Packages() {
         })}
       >
         <div className={classes.drawerHeader} />
+        <LogoutDropdown />
 
         <Card>
           <Card.Header>Packages</Card.Header>

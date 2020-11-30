@@ -9,6 +9,8 @@ import { multiFileUpload } from "../../services/multiFileUpload";
 import { basicInfo } from "../../services/basicInfo";
 import { basicInfoGet } from "../../services/basicInfo";
 import SearchBar from "../Timline/SearchBar";
+import LogoutDropdown from "../Timline/LogoutDropdown";
+
 const jwt = require("jsonwebtoken");
 
 class Basic extends Component {
@@ -249,6 +251,8 @@ class Basic extends Component {
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
           {/* <SearchAppBar /> */}
           <SearchBar />
+          <LogoutDropdown />
+
           <div
             className="container"
             style={{
@@ -312,7 +316,12 @@ class Basic extends Component {
 
                 <h3>Basic Info</h3>
                 <div style={basicInfoStyle}>
-                  <span onClick={this.handleBasicInfo}>Add Basic Info</span>
+                  <span
+                    onClick={this.handleBasicInfo}
+                    style={{ color: "blue" }}
+                  >
+                    Add Basic Info
+                  </span>
 
                   <h4 className="mt-2 mb-4">{`${firstName} ${lastName}`}</h4>
                   <p className="mt-2 mb-4">{getBio}</p>

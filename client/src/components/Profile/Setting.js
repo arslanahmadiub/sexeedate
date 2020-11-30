@@ -5,6 +5,8 @@ import { updateUserPassword } from "../../services/profile";
 import SearchBar from "../Timline/SearchBar";
 import { deCodeId } from "../../services/userId";
 import { currentPass } from "../../services/profile";
+import LogoutDropdown from "../Timline/LogoutDropdown";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class Setting extends Component {
   state = {
@@ -13,6 +15,7 @@ class Setting extends Component {
     newPassword: "",
     update: false,
     alertText: "",
+    loading: false,
   };
 
   onChangePassword = async (e) => {
@@ -30,7 +33,7 @@ class Setting extends Component {
       this.setState({ update: true });
     } else {
       if (currentPassword.length > 0) {
-        this.setState({ update: false });
+        this.setState({ update: false, loading: true });
 
         let passData = {
           userId: userId,
@@ -38,7 +41,10 @@ class Setting extends Component {
         };
         let { data } = await currentPass(passData);
         if (data === "Password Not Matach") {
-          this.setState({ alertText: "Current Password Not Correct...." });
+          this.setState({
+            alertText: "Current Password Not Correct....",
+            loading: false,
+          });
           this.setState({ update: true });
         } else {
           let passData = {
@@ -50,7 +56,7 @@ class Setting extends Component {
             alertText: "Your Password is successfully update..",
           });
           await updateUserPassword(passData);
-          this.setState({ update: true, UpdatePassword: "" });
+          this.setState({ update: true, UpdatePassword: "", loading: false });
           setTimeout(() => {
             this.setState({ update: false });
           }, 5000);
@@ -76,6 +82,8 @@ class Setting extends Component {
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
           {/* <SearchAppBar /> */}
           <SearchBar />
+          <LogoutDropdown />
+
           <div
             className="container"
             style={{
@@ -136,7 +144,9 @@ class Setting extends Component {
                 style={{ padding: "25px", color: "white" }}
               >
                 {/* update password */}
-
+                <div style={this.state.loading ? loadingStyle : unLoadingStyle}>
+                  <CircularProgress color="inherit" />
+                </div>
                 <div className="profileForm">
                   <div
                     className="alert alert-primary"
@@ -190,3 +200,29 @@ class Setting extends Component {
 }
 
 export default Setting;
+
+const loadingStyle = {
+  zIndex: 50,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  background: "rgba(0, 0, 0, 0.8)",
+  width: "100vw",
+  height: "100vh",
+  position: "absolute",
+  top: "0",
+  left: "0",
+};
+
+const unLoadingStyle = {
+  zIndex: -50,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  background: "rgba(0, 0, 0, 0.8)",
+  width: "100vw",
+  height: "100vh",
+  position: "absolute",
+  top: "0",
+  left: "0",
+};

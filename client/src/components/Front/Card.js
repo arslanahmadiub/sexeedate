@@ -2,18 +2,19 @@ import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Slider from "./Slider";
 
-import IconButton from '@material-ui/core/IconButton';
-import {deCodeId} from '../../services/userId'
-import {sendFriendRequest} from '../../services/friendGet'
+import IconButton from "@material-ui/core/IconButton";
+import { deCodeId } from "../../services/userId";
+import { sendFriendRequest } from "../../services/friendGet";
+import { dislikeList } from "../../services/friendGet";
 
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import ShowMoreText  from 'react-show-more-text';
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import ShowMoreText from "react-show-more-text";
 class Card extends Component {
   state = {};
 
   handelFriendRequest = async (e) => {
-    this.props.change(e)
+    this.props.change(e);
     let senderId = await deCodeId();
 
     let data = {
@@ -22,15 +23,18 @@ class Card extends Component {
       friendStatus: "sent",
     };
     let result = await sendFriendRequest(data);
-
   };
 
+  handelDislikeRequest = async (e) => {
+    this.props.change(e);
+    let senderId = await deCodeId();
 
-
-  handelDislikeRequest = (e)=>{
-    
-    this.props.change(e)
-  }
+    let data = {
+      userId: senderId,
+      friends: e,
+    };
+    await dislikeList(data);
+  };
   render() {
     return (
       <div className="card w-100" style={{ border: "3px solid #B71C1C" }}>
@@ -54,8 +58,12 @@ class Card extends Component {
           </p>
 
           <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <IconButton component="span" onClick={()=>{this.handelFriendRequest(this.props.id)}}>
-            
+            <IconButton
+              component="span"
+              onClick={() => {
+                this.handelFriendRequest(this.props.id);
+              }}
+            >
               <ThumbUpIcon
                 style={{
                   color: "#BA1D1D",
@@ -65,7 +73,12 @@ class Card extends Component {
                 }}
               />
             </IconButton>
-            <IconButton component="span" onClick={()=>{this.handelDislikeRequest(this.props.id)}}>
+            <IconButton
+              component="span"
+              onClick={() => {
+                this.handelDislikeRequest(this.props.id);
+              }}
+            >
               <ThumbDownIcon
                 style={{
                   color: "#BA1D1D",

@@ -13,6 +13,7 @@ import moment from "moment";
 import Dropdown from "react-bootstrap/Dropdown";
 import { packageGet } from "../../services/packages";
 import { proUser } from "../../services/profile";
+import LogoutDropdown from "../Timline/LogoutDropdown";
 
 const paymentPostUrl = apiEndPoint + "/payment";
 
@@ -89,6 +90,8 @@ function ProUser() {
     <React.Fragment>
       <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
         <SearchBar />
+        <LogoutDropdown />
+
         <div
           className="container"
           style={{

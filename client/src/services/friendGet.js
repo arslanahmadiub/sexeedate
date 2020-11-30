@@ -7,6 +7,7 @@ const friendRequestSendUrl = apiEndPoint + "/sendFriendRequest";
 const findFriendRequestUrl = apiEndPoint + "/findFriendRequest";
 const deleteFriendRequestUrl = apiEndPoint + "/deleteFriendRequest";
 const addFriendUrl = apiEndPoint + "/addFriend";
+const dislikeListUrl = apiEndPoint + "/dislikeFriend";
 
 export async function friendGet(data) {
   return await axios.post(friendGetUrl, data);
@@ -28,4 +29,7 @@ export async function deleteFriendRequest(data) {
 }
 export async function addFriendInList(data) {
   return await axios.post(addFriendUrl, data);
+}
+export async function dislikeList(data) {
+  return await axios.post(dislikeListUrl, data);
 }

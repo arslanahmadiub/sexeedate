@@ -13,6 +13,7 @@ import { userImageGet } from "../../services/friendGet";
 
 import IconButton from "@material-ui/core/IconButton";
 import "./chat.css";
+import LogoutDropdown from "../Timline/LogoutDropdown";
 
 const socketUrl = "http://157.230.228.67:5000";
 
@@ -30,6 +31,7 @@ class Chat extends Component {
     receiverId: "",
     socket: "null",
     userAvatar: "",
+    badgeShow: false,
   };
 
   async componentDidMount() {
@@ -171,12 +173,13 @@ class Chat extends Component {
 
     push("/home");
   };
-  handelLogout = () => {
-    const {
-      history: { push },
-    } = this.props;
-
-    push("/");
+  handelLogout = async () => {
+    // const {
+    //   history: { push },
+    // } = this.props;
+    // push("/");
+    // localStorage.removeItem("token");
+    await this.setState({ badgeShow: !this.state.badgeShow });
   };
 
   handelChatClick = async (e) => {
@@ -224,6 +227,7 @@ class Chat extends Component {
 
     return (
       <main style={{ overflow: "auto" }}>
+        <LogoutDropdown show={this.state.badgeShow} />
         <div className="layout">
           <div
             className="sidebar"

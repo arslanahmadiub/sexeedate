@@ -9,6 +9,7 @@ import { deCodeId } from "../../services/userId";
 import SearchBar from "../Timline/SearchBar";
 import Alert from "react-bootstrap/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import LogoutDropdown from "../Timline/LogoutDropdown";
 
 function Hobies() {
   let [covid, setCovid] = useState("block");
@@ -114,6 +115,8 @@ function Hobies() {
       <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
         {/* <SearchAppBar/> */}
         <SearchBar />
+        <LogoutDropdown />
+
         <div
           className="container"
           style={{
@@ -182,7 +185,11 @@ function Hobies() {
               </div>
               <h3 style={{ textAlign: "center" }}>Add Your Hobies</h3>
               <div style={covidStyle}>
-                <span style={{ fontSize: "16px" }} onClick={handelCovid}>
+                <span
+                  style={{ fontSize: "16px" }}
+                  onClick={handelCovid}
+                  style={{ color: "blue" }}
+                >
                   Add Hobies
                 </span>
                 <div className="mt-3" id="hobies">

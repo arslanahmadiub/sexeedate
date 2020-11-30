@@ -150,6 +150,10 @@ function Register() {
     left: "0",
   };
 
+  let handelLoginClick = () => {
+    history.push("/");
+  };
+
   return (
     <React.Fragment>
       <div
@@ -313,6 +317,18 @@ function Register() {
                 Sign Up
               </button>
             </div>
+            <h5
+              style={{
+                color: "#B71C1C",
+                textAlign: "center",
+
+                fontSize: "18px",
+                cursor: "pointer",
+              }}
+              onClick={handelLoginClick}
+            >
+              For Login Click Here...
+            </h5>
           </div>
         </div>
       </div>

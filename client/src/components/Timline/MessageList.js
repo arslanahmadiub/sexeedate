@@ -92,7 +92,7 @@ function MessageList(props) {
       <div className={show ? "notifi-box" : "notifi-box2"}>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <a href="#/chat" id="allChat">
-            See All Chat
+            See All Chats
           </a>
         </div>
         {message.length > 0

@@ -5,12 +5,15 @@ const router = express.Router();
 const Profile = require("../models/Profile");
 const FriendList = require("../models/FriendList");
 const FriendRequest = require("../models/FriendRequest");
+const DislikeList = require("../models/DislikeList");
 
 router.post("/", async (req, res) => {
   let id = mongoose.Types.ObjectId(req.body.userId);
   let userId = req.body.userId;
   let gender = req.body.gender;
   try {
+    let dislike = await DislikeList.find({ userId: userId });
+
     let sentFriendRequest = await FriendRequest.find();
     const receiverId = await sentFriendRequest.map((id) => {
       if (id.receiverId === userId) {
@@ -20,21 +23,24 @@ router.post("/", async (req, res) => {
       }
     });
 
-   
     const result1 = await FriendList.aggregate([
       { $match: { userId: { $eq: userId } } },
     ]);
-    if (result1.length > 0 || receiverId.length > 0) {
+
+    if (result1.length > 0 || receiverId.length > 0 || dislike.length > 0) {
       const ids = await result1[0].friends.map((id) =>
         mongoose.Types.ObjectId(id)
       );
-
+      const dislikeIds = await dislike[0].friends.map((id) =>
+        mongoose.Types.ObjectId(id)
+      );
       const result = await Profile.aggregate([
         {
           $match: {
             $expr: {
               $and: [
                 { $not: { $in: ["$_id", ids] } },
+                { $not: { $in: ["$_id", dislikeIds] } },
                 { $not: { $in: ["$_id", receiverId] } },
                 { $ne: ["$_id", id] },
                 { $ne: ["$gender", gender] },

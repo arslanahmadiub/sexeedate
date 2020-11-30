@@ -7,6 +7,7 @@ import { deCodeId } from "../../services/userId";
 import SearchBar from "../Timline/SearchBar";
 import Alert from "react-bootstrap/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import LogoutDropdown from "../Timline/LogoutDropdown";
 
 class Place extends Component {
   state = {
@@ -118,6 +119,8 @@ class Place extends Component {
         <div style={{ background: "#100C08", width: "100vw", height: "100%" }}>
           {/* <SearchAppBar/> */}
           <SearchBar />
+          <LogoutDropdown />
+
           <div
             className="container"
             style={{
@@ -186,7 +189,10 @@ class Place extends Component {
                 {/* Work Section */}
                 <h3>Current Place</h3>
                 <div style={workStyle}>
-                  <span onClick={this.handelWorkPlace}>
+                  <span
+                    onClick={this.handelWorkPlace}
+                    style={{ color: "blue" }}
+                  >
                     Add Current Workplace
                   </span>
                   <h5 className="mt-2">{fetchCurrentTown}</h5>
